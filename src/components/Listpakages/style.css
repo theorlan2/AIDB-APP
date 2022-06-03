@@ -1,0 +1,35 @@
+
+.cont-list-packages { 
+    display: flex;   
+    flex-direction: column; 
+}
+.cont-title-list-pakages {
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+}
+.cont-list-packages ul { 
+    list-style: none;
+    padding: 0;
+}
+.cont-list-packages ul li { 
+    border-bottom: 1px solid #D0D9DD;
+    width: 100%;
+    display: inline-block;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.cont-list-packages ul li button {
+    display: inline-block;
+    border: none; 
+    width: 100%;
+    background-color: rgba(0,0,0,0);
+    text-align: left;
+    cursor: pointer;
+}

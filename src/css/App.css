@@ -1,0 +1,115 @@
+:root {
+  --background-color: #ECEFF1;
+  --background-color-2: #CFD8DC;
+  --text-color: #444444;
+  --text-button-color: #fff;
+  --button-color: #90A4AE;
+  --link-color: #543fd7;
+}
+
+
+html[data-theme='light'] {
+  --background-color: #fff;
+  --text-color: #121416d8;
+  --link-color: #543fd7;
+  --text-button-color: #fff;
+}
+
+html[data-theme='dark'] {
+  --background-color: #212a2e;
+  --text-color: #F7F8F8;
+  --link-color: #828fff;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+
+}
+
+.app-header {
+  background-color: var(--background-color-2);
+  min-height: 100vh;
+  width: 350px;
+  max-width: 350px;
+  min-width: 350px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 1vmin);
+  color: var(--text-color);
+}
+
+
+.cont-package-name h3 {
+  font-size: 16px;
+}
+
+.cont-package-name .package-name {
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.app-main {
+  background-color: var(--background-color);
+  display: flex;
+  max-height: 100vh;
+  min-width: 450px;
+  width: 100%;
+  overflow: scroll;
+}
+
+button {
+  font-size: calc(6px + 1vmin);
+}
+
+.cont_buttons {
+  max-width: 400px;
+}
+
+.cont_buttons .button {
+  width: 100%;
+  height: 34px;
+  margin-bottom: 10px;
+  background-color: #90A4AE;
+  border: none;
+  border-radius: 2px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 375ms;
+  color: var(--color-text);
+}
+
+.cont_buttons .button:hover {
+background-color: #fff;
+}
+
+.input-text {}
+
+
+
+
+
+.App-logo {
+  height: 80px;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+ 
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

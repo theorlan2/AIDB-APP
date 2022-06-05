@@ -8,7 +8,7 @@ import { cleanAndRestartCommand, cleanCommand, getListPackets, startAppCommand, 
 export const CommandsContext = createContext({
     commands: [] as CommandI[],
     packageActive: '', 
-    setCommands: (value: CommandI[]) => { },
+    setCommands: (t: any) => {},
     setPackageActive: (value: string) => { }, 
     openApp: () => { },
     closeApp: () => { },

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getListPackets } from '../utils/Commands';
 import { CommandStatus } from '../types/enums/commands';
 import Header from '../components/Layout/Header';
+import { CommandI } from '../types/models/commands';
 
 export default function PackageScreen() {
     const navigate = useNavigate();
@@ -38,9 +39,10 @@ export default function PackageScreen() {
             setPackageListFilter(list as any);
         },
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `command list package error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }]);
+                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command list package error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }]);
                 setHaveError(true)
-                setErrorText(`command list package error: "${_error}"`);
+                setIsLoading(false);
+                setErrorText(`Command list package error: "${_error}"`);
             },
             close => {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close List Packages...', status: CommandStatus.INFO, date: new Date().toDateString() }]);

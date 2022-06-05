@@ -45,5 +45,7 @@ export async function sendCommand(commandName: string, params: string[], onData:
     command.on('error', onError);
     command.stdout.on('data', onData)
     command.stderr.on('data', onError)
-    await command.spawn()
+    await command.spawn().catch((_err) => {
+        onError(_err);
+    });
 }

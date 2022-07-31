@@ -8,6 +8,7 @@ type Props = {
     onBack?: () => void;
     onClear?: () => void;
     onUpdate?: () => void;
+    fixed?: boolean;
     hiddenBack?: boolean;
     showUpdateAction?: boolean;
     isLoadingUpdate?: boolean;
@@ -18,7 +19,7 @@ type Props = {
 const Header: FunctionComponent<Props> = (props) => {
 
     return (
-        <div className="cont-header-main flex justify-between items-center drop-shadow-sm w-full  bg-slate-100 dark:bg-gray-700 p-2">
+        <div className={`cont-header-main flex justify-between items-center drop-shadow-sm w-full  bg-slate-100 dark:bg-gray-700 p-2 max-w-lg  ${props.fixed && 'fixed'}`}>
             {!props.hiddenBack && <div className="cont-header-back flex">
                 <button className='text-gray-500 dark:text-white p-2' onClick={props.onBack} ><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />

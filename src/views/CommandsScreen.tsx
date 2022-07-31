@@ -1,17 +1,16 @@
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
 //
 import { CommandList } from '../components/CommandList'
 import Header from '../components/Layout/Header'
-import { useCommands } from '../context/commandsContexts'
-import { useNavigate } from 'react-router-dom'
+import { useCommands } from '../context/commandsContexts' 
+
 type Props = {}
 
 const CommandsScreen: FunctionComponent<Props> = () => {
 
     const { commands, setCommands } = useCommands()
 
-    const navigate = useNavigate();
     useEffect(() => {
         checkIsRunPort();
         return () => {
@@ -32,8 +31,10 @@ const CommandsScreen: FunctionComponent<Props> = () => {
 
     return (
         <div>
-            <Header showClearAction={true} onClear={clearCommands} hiddenBack={true} onChangeSearch={() => { }} title='Lista de comandos' />
+            <Header showClearAction={true} onClear={clearCommands} hiddenBack={true} fixed onChangeSearch={() => { }} title='Lista de comandos' />
+            <div className='pt-12' >
             <CommandList items={commands} selectItem={(str) => { }} />
+            </div>
         </div>
     )
 }

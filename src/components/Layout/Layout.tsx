@@ -33,6 +33,10 @@ const Layout: FunctionComponent<Props> = (props) => {
             case 'cleanAndRestart':
                 clearAndRestartApp();
                 break;
+
+            case 'openConfiguration':
+                navigate('configuration');
+                break;
         }
     }
 

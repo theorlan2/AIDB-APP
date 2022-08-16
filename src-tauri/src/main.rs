@@ -5,7 +5,7 @@
 
 
 fn main() {
- // fix_path_env::fix();
+  fix_path_env::fix();
   tauri::Builder::default()
   .invoke_handler(tauri::generate_handler![])  
   .run(tauri::generate_context!())

@@ -144,7 +144,7 @@ Usando la lista de paquetes de nuestro dispositivo android y selecionando el paq
   <details>
   <summary>WINDOWS</summary>
 
-  - Descarga [android platform tools](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) y descromprime el en algun lugar. [Agrega el fólder con la ruta](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
+  - Descarga [android platform tools](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) y descromprime el en algun lugar. [Agrega el fólder con la ruta al PATH de Windows](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
 
   - [Instalar los drivers USB para tu dispositivo](https://developer.android.com/studio/run/oem-usb#Drivers)
   - Revisa si tu dispositivo Android es detectado:

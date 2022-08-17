@@ -22,9 +22,9 @@ const ConfigurationsScreen: FunctionComponent<Props> = () => {
 
     return (
         <div>
-            <Header showClearAction={false} onClear={clearCommands} hiddenBack={false} onChangeSearch={() => { }} title='Configuracion' onBack={() => navigate('/')} />
+            <Header showClearAction={false} onClear={clearCommands} hiddenBack={false} onChangeSearch={() => { }} title='Configuration' onBack={() => navigate('/')} />
             <div className='flex justify-center items-center' >
-                <p>No data.</p>
+                <p className='text-gray-500 dark:text-white mt-10' >No data.</p>
             </div>
          </div>
     )

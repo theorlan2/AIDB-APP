@@ -53,7 +53,7 @@ export default function PackageScreen() {
     }
 
     return (<div className='' >
-        <Header showUpdateAction={true} isLoadingUpdate={isLoading} onUpdate={getPackageList} showSearch={true} onBack={() => { navigate('/') }} onChangeSearch={(str) => { filterPackage(str); }} title='Lista de paquetes' />
+        <Header showUpdateAction={true} isLoadingUpdate={isLoading} onUpdate={getPackageList} showSearch={true} onBack={() => { navigate('/') }} onChangeSearch={(str) => { filterPackage(str); }} title='List Packages' />
         <ListPackages haveError={haveError} errorText={errorText}  packages={packageListFilter} selectPackage={(str) => { setPackageActive(str); navigate('/') }} />
     </div>
     )

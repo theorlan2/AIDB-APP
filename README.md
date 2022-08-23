@@ -4,7 +4,12 @@
 <img src="./resources/images/logo.png" width="100" alt="uad_screenshot"  >
 </p>
 
-### EN
+
+### ENGLISH
+
+ <p align="center">
+<img src="./resources/screenshots/adb-emulator.gif" width="800" alt="uad_screenshot"  >
+</p>
 adb commands GUI, to facilitate the development of android applications (React Native).
 
 ##### This software is still in an early stage of development. Check out the issues, and feel free to contribute!
@@ -116,7 +121,7 @@ or
   </details>
   </p>
 
-### ES
+### ESPAÑOL
 ADB comandos GUI, Para facilitar el desarrollo de aplicaciones android(React Native).
 
 ##### El programa esta en desarrollo. Revisa o crea issues, y si puedes contribuye!
@@ -231,6 +236,7 @@ or
 
 
 ## Screenshots
+
  <p align="center">
 <img src="./resources/screenshots/android-taury.gif" width="800" alt="uad_screenshot"  >
 </p>

@@ -22,21 +22,25 @@ Is necessary [install the prerequisites of **tauri**](https://tauri.app/v1/guide
 
 * Now clone the repository and install the dependencies with the command:
 
-  ```  
+
+```  
 yarn install
-  ```
+```
  or 
+
 ``` 
   npm install 
 ```
 
 
-* Now you can run the following command in your terminal to start a **development build** :
+* Now you can run the following command in your terminal to start a  **development build** :
+
  
-  ```  
+```  
 yarn tauri dev
-  ```
+```
 or 
+
 ``` 
  npm tauri dev
 ```
@@ -45,10 +49,11 @@ or
 
 * To **build** and bundle the application into a single executable simply run the following command:
 
-  ```  
+```  
 yarn tauri build
-  ```
+```
 or 
+
 ``` 
  npm tauri build
 ```
@@ -62,9 +67,9 @@ or
 * [X] Open the application
 * [X] Close app Clear data
 * [X] Wipe data and reboot app
-* [-] Configure adb location
-* [-] Menu to start emulator
-* [-] Clear package selection
+* [ ] Configure adb location
+* [ ] Menu to start emulator
+* [ ] Clear package selection
 
 ## Requerimients
 
@@ -135,10 +140,11 @@ Es necesario [instalar los requisitorios de **tauri**](https://tauri.app/v1/guid
 
 * Luego puedes clonar el repositorio e instalar las dependencias con el comando:
 
-  ```  
+```  
 yarn install
-  ```
+```
  ó
+
 ``` 
   npm install 
 ```
@@ -146,10 +152,11 @@ yarn install
 
 * Ya puedes ejecutar en tu terminal el siguiente comando para iniciar la aplicación en modo desarrollo:
  
-  ```  
+```  
 yarn tauri dev
-  ```
-or 
+```
+ ó
+
 ``` 
  npm tauri dev
 ```
@@ -158,10 +165,11 @@ or
 
 * Para compilar la aplicación para producción en un solo archivo simplemente ejecuta el comando:
 
-  ```  
+```  
 yarn tauri build
-  ```
-or 
+```
+ ó 
+
 ``` 
  npm tauri build
 ```
@@ -175,9 +183,9 @@ or
 * [X] Abrir la aplicación
 * [X] Cerrar aplicación Limpiar datos
 * [X] Limpiar datos y reiniciar de la aplicación
-* [-] Configurar la ubicación del ejecutable adb
-* [-] Menú para iniciar emulador
-* [-] Limpiar la selección de paquete
+* [ ] Configurar la ubicación del ejecutable adb
+* [ ] Menú para iniciar emulador
+* [ ] Limpiar la selección de paquete
 
 ## Requisitos
 

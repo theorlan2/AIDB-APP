@@ -10,7 +10,7 @@ type Props = {
 const Layout: FunctionComponent<Props> = (props) => {
 
     const navigate = useNavigate();
-    const { packageActive, openApp, closeApp, clearApp, clearAndRestartApp } = useCommands();
+    const { packageActive,devices, openApp, closeApp, clearApp, clearAndRestartApp, getTheListDevices } = useCommands();
 
     async function action(name: string) { 
         switch (name) {
@@ -37,12 +37,16 @@ const Layout: FunctionComponent<Props> = (props) => {
             case 'openConfiguration':
                 navigate('configuration');
                 break;
+
+            case 'getTheListDevices':
+                getTheListDevices();
+                break;
         }
     }
 
     return (
         <div className="App">
-            <Drawer packageName={packageActive} packageActive={packageActive ? true : false} action={action} />
+            <Drawer devices={devices} packageName={packageActive} packageActive={packageActive ? true : false} action={action} />
             <main className='flex-auto bg-slate-100 dark:bg-gray-800 h-screen  app-main overflow-scroll' >
                 <Outlet />
             </main>

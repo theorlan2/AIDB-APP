@@ -12,6 +12,31 @@ export async function getListPackets(onData: (result: string) => void, onError: 
 }
 
 
+export async function getListDevices(onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+    sendCommand('list_devices', [
+        "devices",
+        "-l"
+    ], onData, onError, onClose);
+}
+
+export async function screenCap(dirOnDevice = '/sdcard/screen.png', onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+    sendCommand('screen_cap', [
+        "shell",
+        "screencap",
+        dirOnDevice
+    ], onData, onError, onClose);
+}
+
+
+export async function recordScreen(dirOnDevice = '/sdcard/demo.mp4', onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+    sendCommand('screen_record', [
+        "shell",
+        "screenrecord",
+        dirOnDevice
+    ], onData, onError, onClose);
+}
+
+
 export async function startAppCommand(packageActive: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
     sendCommand('start_app', ["shell",
         "am",

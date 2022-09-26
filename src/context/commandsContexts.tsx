@@ -1,24 +1,28 @@
 import React, { createContext, useContext, useState } from 'react';
 import { CommandStatus } from '../types/enums/commands';
 import { CommandI } from '../types/models/commands';
-import { cleanAndRestartCommand, cleanCommand, getListPackets, startAppCommand, stopAppCommand } from '../utils/Commands';
+import { cleanAndRestartCommand, cleanCommand, getListDevices, startAppCommand, stopAppCommand } from '../utils/Commands';
+import { getTypeAndModelDevice } from '../utils/getListDevices';
 
 
 
 export const CommandsContext = createContext({
+    devices: [] as  { id: string, name: string }[],
     commands: [] as CommandI[],
-    packageActive: '', 
-    setCommands: (t: any) => {},
-    setPackageActive: (value: string) => { }, 
+    packageActive: '',
+    setCommands: (t: any) => { },
+    setPackageActive: (value: string) => { },
     openApp: () => { },
     closeApp: () => { },
     clearApp: () => { },
-    clearAndRestartApp: () => { }
+    clearAndRestartApp: () => { },
+    getTheListDevices: () => { }
 });
 
 
 export const CommandsProvider = (props: any) => {
 
+    const [devices, setDevices] = useState([] as { id: string, name: string }[]);
     const [commands, setCommands] = useState([] as CommandI[]);
     const [packageActive, setPackageActive] = useState('')
 
@@ -68,16 +72,33 @@ export const CommandsProvider = (props: any) => {
             })
     }
 
+    function getTheListDevices() {
+        getListDevices(data => {
+            let device = getTypeAndModelDevice(data);
+            if (device) {
+                if (!devices.find(item => item.id === device?.id) && device.id != '')
+                    setDevices([...devices, device]);
+            }
+        },
+            _error => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+            }, close => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            })
+    }
+
 
     const defaultValue = {
+        devices,
         commands,
-        packageActive, 
+        packageActive,
         setCommands: (data: CommandI[]) => setCommands(data),
-        setPackageActive: (data: string) => setPackageActive(data), 
+        setPackageActive: (data: string) => setPackageActive(data),
         openApp: () => open(),
         closeApp: () => close(),
         clearApp: () => clear(),
-        clearAndRestartApp: () => clearAndRestart(), 
+        clearAndRestartApp: () => clearAndRestart(),
+        getTheListDevices: () => getTheListDevices(),
     };
     return (
         <CommandsContext.Provider value={defaultValue} >

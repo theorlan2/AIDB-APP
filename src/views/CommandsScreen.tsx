@@ -31,7 +31,7 @@ const CommandsScreen: FunctionComponent<Props> = () => {
 
     return (
         <div>
-            <Header showClearAction={true} onClear={clearCommands} hiddenBack={true} fixed onChangeSearch={() => { }} title='Commands List' />
+            <Header showClearAction={true} justifyBetween={true} onClear={clearCommands} hiddenBack={true} fixed onChangeSearch={() => { }} title='Commands List' />
             <div className='pt-12' >
             <CommandList items={commands} selectItem={(str) => { }} />
             </div>

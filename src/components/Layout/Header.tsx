@@ -9,6 +9,7 @@ type Props = {
     onClear?: () => void;
     onUpdate?: () => void;
     fixed?: boolean;
+    justifyBetween?: boolean;
     hiddenBack?: boolean;
     showUpdateAction?: boolean;
     isLoadingUpdate?: boolean;
@@ -19,14 +20,14 @@ type Props = {
 const Header: FunctionComponent<Props> = (props) => {
 
     return (
-        <div className={`cont-header-main flex justify-between items-center drop-shadow-sm w-full  bg-slate-100 dark:bg-gray-700 p-2 max-w-lg  ${props.fixed && 'fixed'}`}>
+        <div className={`cont-header-main flex items-center drop-shadow-sm w-full  bg-slate-100 dark:bg-gray-700 p-2 max-w-lg  ${props.fixed && 'fixed'} ${props.justifyBetween && 'justify-between '}`}>
             {!props.hiddenBack && <div className="cont-header-back flex">
                 <button className='text-gray-500 dark:text-white p-2' onClick={props.onBack} ><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                 </svg></button>
             </div>}
             <div className='header-title flex ' >
-                <h4 className='text-sm text-gray-500 dark:text-white' >{props.title}</h4>
+                <h4 className='text-sm text-left text-gray-500 dark:text-white' >{props.title}</h4>
                 {props.subTitle && <p className='sub-title text-xs text-gray-500 dark:text-white' >{props.subTitle}</p>}
             </div>
             <div className="cont-header-actions flex ">

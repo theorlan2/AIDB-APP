@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { ListPackages } from '../components/Listpakages';
-import { useCommands } from '../context/commandsContexts';
 import { useNavigate } from 'react-router-dom';
+//
+import { useCommands } from '../context/commandsContexts';
 import { getListPackets } from '../utils/Commands';
 import { CommandStatus } from '../types/enums/commands';
-import Header from '../components/Layout/Header';
 import { CommandI } from '../types/models/commands';
+//
+import { ListPackages } from '../components/Listpakages';
+import Header from '../components/Layout/Header';
 
 export default function PackageScreen() {
     const navigate = useNavigate();
@@ -53,7 +55,7 @@ export default function PackageScreen() {
     }
 
     return (<div className='' >
-        <Header showUpdateAction={true} isLoadingUpdate={isLoading} onUpdate={getPackageList} showSearch={true} onBack={() => { navigate('/') }} onChangeSearch={(str) => { filterPackage(str); }} title='List Packages' />
+        <Header showUpdateAction={true} isLoadingUpdate={isLoading} onUpdate={getPackageList} showSearch={true} justifyBetween={true} onBack={() => { navigate('/') }} onChangeSearch={(str) => { filterPackage(str); }} title='List Packages' />
         <ListPackages haveError={haveError} errorText={errorText}  packages={packageListFilter} selectPackage={(str) => { setPackageActive(str); navigate('/') }} />
     </div>
     )

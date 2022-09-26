@@ -1,6 +1,6 @@
 import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, ChevronUpDownIcon, DevicePhoneMobileIcon, CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ChevronUpDownIcon, DevicePhoneMobileIcon, CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLeftIcon, CubeIcon, CheckCircleIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 //
 import logo from '../../assets/logo.png'
 import logoWhite from '../../assets/logo_white.png'
@@ -15,10 +15,7 @@ const Drawer: FunctionComponent<Props> = (props) => {
     useEffect(() => {
         props.action('getTheListDevices');
     }, [])
-    const [devices, setDevices] = useState([
-        { id: '0', name: 'Select device...', description: '', isDevice: false },
-    ])
-    const [selected, setSelected] = useState(devices[0])
+    const [selected, setSelected] = useState({ id: '0', name: 'Select device...', description: '', isDevice: false })
 
 
     return (
@@ -39,7 +36,7 @@ const Drawer: FunctionComponent<Props> = (props) => {
             <div className='select-device' >
                 <Listbox value={selected} onChange={setSelected}>
                     <div className="relative mt-1">
-                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-8 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                        <Listbox.Button className="relative w-full cursor-default rounded bg-white py-2 pl-8 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                             <span className="pointer-events-none absolute inset-y-0 left-1 flex items-center pr-2">
                                 <DevicePhoneMobileIcon
                                     className="h-5 w-5 text-gray-400"
@@ -60,12 +57,12 @@ const Drawer: FunctionComponent<Props> = (props) => {
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <Listbox.Options className="absolute mt-1 max-h-screen w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            <Listbox.Options className="absolute mt-1 max-h-screen w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
                                 {props.devices.map((device, deviceIdx) => (
                                     <Listbox.Option
                                         key={deviceIdx}
                                         className={({ active }) =>
-                                            `relative cursor-default select-none py-2 pl-5 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                                            `relative cursor-default select-none py-2 pl-5 pr-4 ${active ? 'bg-slate-100 text-slate-900' : 'text-gray-900'
                                             }`
                                         }
                                         value={device}
@@ -85,8 +82,8 @@ const Drawer: FunctionComponent<Props> = (props) => {
                                                     </div>
                                                 </div>
                                                 {selected ? (
-                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-600">
+                                                        <CheckCircleIcon className="h-4 w-4" aria-hidden="true" />
                                                     </span>
                                                 ) : null}
                                             </>
@@ -119,14 +116,18 @@ const Drawer: FunctionComponent<Props> = (props) => {
 
 
             {
-                props.packageActive && <div className="cont-package-name text-left mb-2">
-                    <h3 className='text-xs font-bold text-gray-500 dark:text-white' >Package: <p className='package-name text-base dark:text-white font-light ' >{props.packageName}</p></h3>
+                props.packageActive && <div className="cont-package-name text-left mb-2 z-0">
+                    <h3 className='text-xs font-bold text-gray-500 dark:text-white' >Package:  </h3>
+                    <div className='flex items-center text-gray-500 dark:text-white opacity-80 uppercase z-0' >
+                        <CubeIcon className='h-5 w-5 mr-1' /><p className='package-name text-sm font-medium dark:text-white z-0' >{props.packageName}</p>
+                    </div>
                 </div>
             }
             <div className="cont_buttons">
-                <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' onClick={() => { props.action('listPackets') }}>
-                    GET PACKAGE LIST
-                </button>
+                {!props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' onClick={() => { props.action('listPackets') }}> GET PACKAGE LIST </button>}
+                {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('backToList'); }}>
+                    <ArrowLeftIcon className='h-4 w-4 mr-2' />
+                    BACK TO LIST</button>}
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('startApp'); }}>START APPLICATION</button>}
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('stopApp'); }}>STOP APP</button>}
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('clean'); }}>CLEAN DATA</button>}

@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+//
 import App from './routes'
 import './css/main.css'
-import { CommandsContext, CommandsProvider } from './context/commandsContexts'
+import { CommandsProvider } from './context/commandsContexts'
 import { CommonsProvider } from './context/commonsContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

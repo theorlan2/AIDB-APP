@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useCommands } from '../../context/commandsContexts';
 import Drawer from './Drawer';
-import Header from './Header';
 
 type Props = {
 };
@@ -10,11 +9,15 @@ type Props = {
 const Layout: FunctionComponent<Props> = (props) => {
 
     const navigate = useNavigate();
-    const { packageActive,devices, openApp, closeApp, clearApp, clearAndRestartApp, getTheListDevices } = useCommands();
+    const { packageActive, devices, openApp, closeApp, clearApp, clearAndRestartApp, getTheListDevices, setPackageActive } = useCommands();
 
-    async function action(name: string) { 
+    async function action(name: string) {
         switch (name) {
-            case 'listPackets': 
+            case 'listPackets':
+                navigate('/packages')
+                break;
+            case 'backToList':
+                setPackageActive('');
                 navigate('/packages')
                 break;
 

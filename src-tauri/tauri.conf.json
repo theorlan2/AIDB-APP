@@ -16,6 +16,11 @@
       "dialog": {
         "open": true
       },
+      "clipboard":{
+        "all": false,
+        "readText": false,
+        "writeText": true
+      },
       "shell": {
         "execute": true,
         "sidecar": true,

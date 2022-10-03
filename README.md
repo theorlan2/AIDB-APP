@@ -246,5 +246,6 @@ yarn tauri build
 ## Screenshots
 
  <p align="center">
-<img src="./resources/screenshots/android-taury.gif" width="800" alt="uad_screenshot"  >
+<img src="./resources/screenshots/android-taury-new-desing-default.png" width="800" alt="app_screenshot"  >
+<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="app_dark_screenshot"  >
 </p>

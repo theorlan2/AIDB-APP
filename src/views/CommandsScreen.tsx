@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect } from 'react'
+import { FunctionComponent } from 'react'
 //
 import { CommandList } from '../components/CommandList'
 import Header from '../components/Layout/Header'
@@ -9,14 +9,7 @@ type Props = {}
 const CommandsScreen: FunctionComponent<Props> = () => {
 
     const { commands, setCommands } = useCommands()
-
-    useEffect(() => {
-
-        return () => {
-        }
-    }, [])
-
-
+  
     function clearCommands() {
         setCommands([]);
     }

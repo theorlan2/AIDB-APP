@@ -7,12 +7,14 @@ import { getTypeAndModelDevice } from '../utils/getListDevices';
 
 
 export const CommandsContext = createContext({
-    devices: [] as  { id: string, name: string }[],
+    devices: [] as { id: string, name: string }[],
     commands: [] as CommandI[],
+    deviceActive: '',
+    setDeviceActive: (value: string) => { },
     packageActive: '',
-    setCommands: (t: any) => { },
     setPackageActive: (value: string) => { },
     openApp: () => { },
+    setCommands: (t: any) => { },
     closeApp: () => { },
     clearApp: () => { },
     clearAndRestartApp: () => { },
@@ -25,6 +27,7 @@ export const CommandsProvider = (props: any) => {
     const [devices, setDevices] = useState([] as { id: string, name: string }[]);
     const [commands, setCommands] = useState([] as CommandI[]);
     const [packageActive, setPackageActive] = useState('')
+    const [deviceActive, setDeviceActive] = useState('')
 
 
     function open() {
@@ -91,6 +94,8 @@ export const CommandsProvider = (props: any) => {
     const defaultValue = {
         devices,
         commands,
+        deviceActive,
+        setDeviceActive: (data: string) => setDeviceActive(data),
         packageActive,
         setCommands: (data: CommandI[]) => setCommands(data),
         setPackageActive: (data: string) => setPackageActive(data),

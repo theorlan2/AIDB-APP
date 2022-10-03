@@ -29,7 +29,7 @@ export default function PackageScreen() {
     }, [])
 
 
-    function getPackageList() { 
+    function getPackageList() {
         setIsLoading(true);
         setCommands((previewState: CommandI[]) => [...previewState, { str: 'List Packages...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
         let list = [] as string[];
@@ -50,13 +50,13 @@ export default function PackageScreen() {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close List Packages...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
                 setTimeout(() => {
                     setIsLoading(false);
-                },1000);
+                }, 1000);
             })
     }
 
     return (<div className='' >
         <Header showUpdateAction={true} isLoadingUpdate={isLoading} onUpdate={getPackageList} showSearch={true} justifyBetween={true} onBack={() => { navigate('/') }} onChangeSearch={(str) => { filterPackage(str); }} title='List Packages' />
-        <ListPackages haveError={haveError} errorText={errorText}  packages={packageListFilter} selectPackage={(str) => { setPackageActive(str); navigate('/') }} />
+        <ListPackages haveError={haveError} errorText={errorText} packages={packageListFilter} selectPackage={(str) => { setPackageActive(str); navigate('/commands') }} />
     </div>
     )
 }

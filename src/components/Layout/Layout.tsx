@@ -3,10 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useCommands } from '../../context/commandsContexts';
 import Drawer from './Drawer';
 
-type Props = {
-};
-
-const Layout: FunctionComponent<Props> = (props) => {
+const Layout: FunctionComponent = () => {
 
     const navigate = useNavigate();
     const { packageActive, devices, openApp, closeApp, clearApp, clearAndRestartApp, getTheListDevices, setPackageActive } = useCommands();
@@ -50,7 +47,7 @@ const Layout: FunctionComponent<Props> = (props) => {
     return (
         <div className="App">
             <Drawer devices={devices} packageName={packageActive} packageActive={packageActive ? true : false} action={action} />
-            <main className='flex-auto bg-slate-100 dark:bg-gray-800 h-screen  app-main overflow-scroll' >
+            <main className='flex-auto bg-slate-100 dark:bg-gray-800 h-screen  app-main overflow-auto' >
                 <Outlet />
             </main>
         </div>

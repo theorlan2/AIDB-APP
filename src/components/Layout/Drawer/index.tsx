@@ -5,11 +5,12 @@ import logo from '../../../assets/logo.png'
 import logoWhite from '../../../assets/logo_white.png'
 import SelectDevice from './SelectDevice';
 
+
 type Props = {
     devices: { id: string, name: string }[];
     packageActive: boolean;
     packageName: string;
-    action: (name: string) => void;
+    action: (name: string, value?: string) => void;
 }
 
 const Drawer: FunctionComponent<Props> = (props) => {
@@ -30,9 +31,9 @@ const Drawer: FunctionComponent<Props> = (props) => {
         },
         {
             name: 'Commands Device',
-            disabled: true,
+            disabled: false,
             child: <CommandLineIcon className="h-5 w-10 " />,
-            action: () => { }
+            action: () => { props.action('openShellAdb') }
         },
         {
             name: 'Remove App',
@@ -42,11 +43,10 @@ const Drawer: FunctionComponent<Props> = (props) => {
         },
         {
             name: 'Reverse to RN',
-            disabled: true,
+            disabled: false,
             child: <ArrowsRightLeftIcon className="h-5 w-10 " />,
-            action: () => { }
-        },
-
+            action: () => { props.action('reverseConnectionAdb') }
+        }
     ]
 
     useEffect(() => {
@@ -60,8 +60,6 @@ const Drawer: FunctionComponent<Props> = (props) => {
             setIsLoadingPhones(false);
         }, 1000)
     }
-
-
 
     return (
         <header className="w-72 relative float-left h-screen px-3 shadow-md bg-slate-200 dark:bg-gray-600 text-center box-border">
@@ -84,7 +82,7 @@ const Drawer: FunctionComponent<Props> = (props) => {
                 </button>
 
                 <div className="flex w-full ">
-                    <SelectDevice devices={props.devices} onChange={(value) => { setSelected(value) }} />
+                    <SelectDevice devices={props.devices} onChange={(value) => { setSelected(value); props.action('setDeviceActive', value.id); }} />
                 </div>
             </div >
 

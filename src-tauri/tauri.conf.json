@@ -16,13 +16,17 @@
       "dialog": {
         "open": true
       },
-      "clipboard":{
+      "clipboard": {
         "all": false,
         "readText": false,
         "writeText": true
       },
+      "os": {
+        "all": true
+      },
       "shell": {
         "execute": true,
+        "open": true,
         "sidecar": true,
         "scope": [
           {
@@ -97,6 +101,35 @@
               "shell",
               "am",
               "force-stop",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "reverse_connection",
+            "cmd": "adb",
+            "args": [
+              "-s",
+              {
+                "validator": "\\S+"
+              },
+              "reverse",
+              "tcp:",
+              {
+                "validator": "\\S+"
+              },
+              "tcp:",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "open_shell_mac_os",
+            "cmd": "osascript",
+            "args": [
+              "-e",
               {
                 "validator": "\\S+"
               }

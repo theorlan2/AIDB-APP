@@ -6,9 +6,21 @@ import Drawer from './Drawer';
 const Layout: FunctionComponent = () => {
 
     const navigate = useNavigate();
-    const { packageActive, devices, openApp, closeApp, clearApp, clearAndRestartApp, getTheListDevices, setPackageActive } = useCommands();
+    const {
+        packageActive,
+        devices,
+        openApp,
+        closeApp,
+        clearApp,
+        clearAndRestartApp,
+        getTheListDevices,
+        setPackageActive,
+        openShellAdb,
+        setDeviceActive,
+        reverseConnectionAdb
+    } = useCommands();
 
-    async function action(name: string) {
+    async function action(name: string, value?: string) {
         switch (name) {
             case 'listPackets':
                 navigate('/packages')
@@ -40,6 +52,15 @@ const Layout: FunctionComponent = () => {
 
             case 'getTheListDevices':
                 getTheListDevices();
+                break;
+            case 'setDeviceActive':
+                setDeviceActive(value || '');
+                break;
+            case 'openShellAdb':
+                openShellAdb();
+                break;
+            case 'reverseConnectionAdb':
+                reverseConnectionAdb();
                 break;
         }
     }

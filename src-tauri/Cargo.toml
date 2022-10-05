@@ -17,7 +17,7 @@ tauri-build = { version = "1.0.0-rc.12", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0.6", features = ["clipboard-write-text", "dialog-open", "shell-execute", "shell-sidecar"] }
+tauri = { version = "1.0.6", features = ["clipboard-write-text", "dialog-open", "os-all", "shell-execute", "shell-open", "shell-sidecar"] }
 
 [features]
 # by default Tauri runs in production mode

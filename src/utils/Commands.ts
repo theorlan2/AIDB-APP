@@ -1,5 +1,5 @@
 import { Command } from "@tauri-apps/api/shell";
-
+import { platform } from '@tauri-apps/api/os';
 
 
 export async function getListPackets(onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
@@ -53,6 +53,40 @@ export async function cleanCommand(packageActive: string, onData: (result: strin
     sendCommand('clear_app', ["shell",
         "pm",
         "clear", `${packageActive}`], onData, onError, onClose);
+}
+
+export async function openShellOnDevice(nameDevice: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+
+    const platformName = await platform();
+
+    switch (platformName) {
+        case "darwin":
+            sendCommand('open_shell_mac_os', [
+                "-e",
+                `tell app "Terminal" to do script "adb -s ${nameDevice} shell"`
+            ], onData, onError, onClose);
+            break;
+        case "win32":
+            sendCommand('open_shell_mac_os', [
+                "-e",
+                `tell app "Terminal" to do script "adb -s ${nameDevice} shell"`
+            ], onData, onError, onClose);
+        default:
+            break;
+    }
+}
+
+export async function reverseConnection(nameDevice: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+
+    sendCommand('reverse_connection', [
+        "-s",
+        nameDevice,
+        "tcp:",
+        "8081",
+        "tcp:",
+        "8081"
+    ], onData, onError, onClose);
+
 }
 
 export async function cleanAndRestartCommand(packageActive: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {

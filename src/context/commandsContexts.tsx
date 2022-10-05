@@ -1,24 +1,26 @@
 import React, { createContext, useContext, useState } from 'react';
 import { CommandStatus } from '../types/enums/commands';
 import { CommandI } from '../types/models/commands';
-import { cleanAndRestartCommand, cleanCommand, getListDevices, startAppCommand, stopAppCommand } from '../utils/Commands';
+import { cleanAndRestartCommand, cleanCommand, getListDevices, openShellOnDevice, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
 import { getTypeAndModelDevice } from '../utils/getListDevices';
 
 
 
 export const CommandsContext = createContext({
-    devices: [] as { id: string, name: string }[],
     commands: [] as CommandI[],
+    devices: [] as any[],
     deviceActive: '',
     setDeviceActive: (value: string) => { },
     packageActive: '',
+    getTheListDevices: () => { },
     setPackageActive: (value: string) => { },
     openApp: () => { },
     setCommands: (t: any) => { },
+    openShellAdb: () => { },
     closeApp: () => { },
     clearApp: () => { },
     clearAndRestartApp: () => { },
-    getTheListDevices: () => { }
+    reverseConnectionAdb: () => { }
 });
 
 
@@ -90,6 +92,28 @@ export const CommandsProvider = (props: any) => {
             })
     }
 
+    function openShellAdb() {
+        openShellOnDevice(deviceActive, data => {
+            console.log('ee', data);
+        },
+            _error => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+            }, close => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            })
+    }
+
+    function reverseConnectionAdb() {
+        reverseConnection(deviceActive, data => {
+            console.log('ee', data);
+        },
+            _error => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+            }, close => {
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            })
+    }
+
 
     const defaultValue = {
         devices,
@@ -99,9 +123,11 @@ export const CommandsProvider = (props: any) => {
         packageActive,
         setCommands: (data: CommandI[]) => setCommands(data),
         setPackageActive: (data: string) => setPackageActive(data),
+        reverseConnectionAdb: () => reverseConnectionAdb(),
         openApp: () => open(),
         closeApp: () => close(),
         clearApp: () => clear(),
+        openShellAdb: () => openShellAdb(),
         clearAndRestartApp: () => clearAndRestart(),
         getTheListDevices: () => getTheListDevices(),
     };

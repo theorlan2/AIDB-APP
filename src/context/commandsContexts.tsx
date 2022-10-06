@@ -20,7 +20,7 @@ export const CommandsContext = createContext({
     closeApp: () => { },
     clearApp: () => { },
     clearAndRestartApp: () => { },
-    reverseConnectionAdb: () => { }
+    reverseConnectionAdb: (portService: number, portDevice: number) => { }
 });
 
 
@@ -73,7 +73,7 @@ export const CommandsProvider = (props: any) => {
             _error => {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear and restart App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
             })
     }
 
@@ -88,7 +88,7 @@ export const CommandsProvider = (props: any) => {
             _error => {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Get devices...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
             })
     }
 
@@ -99,18 +99,18 @@ export const CommandsProvider = (props: any) => {
             _error => {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Open Shell of device...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
             })
     }
 
-    function reverseConnectionAdb() {
-        reverseConnection(deviceActive, data => {
-            console.log('ee', data);
+    function reverseConnectionAdb(portService: number, portDevice: number) {
+        reverseConnection(deviceActive, portService, portDevice, data => {
+            setCommands((previewState: CommandI[]) => [...previewState, { str: `Complete reverse tcp:${[portService]} tcp:${portDevice}...`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
         },
             _error => {
                 setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommands((previewState: CommandI[]) => [...previewState, { str: `Finish reverse tcp:${[portService]} tcp:${portDevice}....`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
             })
     }
 
@@ -123,7 +123,7 @@ export const CommandsProvider = (props: any) => {
         packageActive,
         setCommands: (data: CommandI[]) => setCommands(data),
         setPackageActive: (data: string) => setPackageActive(data),
-        reverseConnectionAdb: () => reverseConnectionAdb(),
+        reverseConnectionAdb: (portService: number, portDevice: number) => reverseConnectionAdb(portService, portDevice),
         openApp: () => open(),
         closeApp: () => close(),
         clearApp: () => clear(),

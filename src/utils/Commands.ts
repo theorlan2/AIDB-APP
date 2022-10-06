@@ -55,6 +55,15 @@ export async function cleanCommand(packageActive: string, onData: (result: strin
         "clear", `${packageActive}`], onData, onError, onClose);
 }
 
+export async function removeApp(deviceName: string, packageActive: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+    sendCommand('remove_app', ["adb",
+        "-s",
+        deviceName,
+        "uninstall",
+        packageActive,
+    ], onData, onError, onClose);
+}
+
 export async function openShellOnDevice(nameDevice: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
 
     const platformName = await platform();
@@ -76,15 +85,15 @@ export async function openShellOnDevice(nameDevice: string, onData: (result: str
     }
 }
 
-export async function reverseConnection(nameDevice: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+export async function reverseConnection(nameDevice: string, portService: number, portDevice: number, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
+
 
     sendCommand('reverse_connection', [
         "-s",
         nameDevice,
-        "tcp:",
-        "8081",
-        "tcp:",
-        "8081"
+        "reverse",
+        `tcp:${portService}`,
+        `tcp:${portDevice}`
     ], onData, onError, onClose);
 
 }

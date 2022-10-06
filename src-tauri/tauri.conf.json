@@ -82,6 +82,20 @@
             ]
           },
           {
+            "name": "remove_app",
+            "cmd": "adb",
+            "args": [
+              "-s",
+              {
+                "validator": "\\S+"
+              },
+              "uninstall",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
             "name": "start_app",
             "cmd": "adb",
             "args": [
@@ -109,21 +123,7 @@
           {
             "name": "reverse_connection",
             "cmd": "adb",
-            "args": [
-              "-s",
-              {
-                "validator": "\\S+"
-              },
-              "reverse",
-              "tcp:",
-              {
-                "validator": "\\S+"
-              },
-              "tcp:",
-              {
-                "validator": "\\S+"
-              }
-            ]
+            "args": true
           },
           {
             "name": "open_shell_mac_os",

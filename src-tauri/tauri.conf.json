@@ -84,16 +84,7 @@
           {
             "name": "remove_app",
             "cmd": "adb",
-            "args": [
-              "-s",
-              {
-                "validator": "\\S+"
-              },
-              "uninstall",
-              {
-                "validator": "\\S+"
-              }
-            ]
+            "args": true
           },
           {
             "name": "start_app",

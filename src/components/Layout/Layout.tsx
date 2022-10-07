@@ -1,14 +1,37 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useState } from 'react'
+import { connect } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
+//
 import { useCommands } from '../../context/commandsContexts';
+import { RootState } from '../../store';
+import DialogAlertRemove from '../dialogs/DialogAlertRemove';
+import DialogLoading from '../dialogs/DialogLoading';
 import Drawer from './Drawer';
 
-const Layout: FunctionComponent = () => {
 
+
+
+interface StateProps {
+    locationPrintScreens: string;
+    locationRecordScreen: string;
+    portServiceReverse: number;
+    portDeviceReverse: number;
+
+}
+
+interface DispatchProps { }
+
+interface OwnProps { };
+
+type Props = StateProps & DispatchProps & OwnProps;
+
+const Layout: FunctionComponent<Props> = (props) => {
+    const [showDialogAlertRemove, setShowDialogAlertRemove] = useState(true);
     const navigate = useNavigate();
     const {
         packageActive,
         devices,
+        isLoadingCommand,
         openApp,
         closeApp,
         clearApp,
@@ -17,7 +40,8 @@ const Layout: FunctionComponent = () => {
         setPackageActive,
         openShellAdb,
         setDeviceActive,
-        reverseConnectionAdb
+        reverseConnectionAdb,
+        removeTheApp
     } = useCommands();
 
     async function action(name: string, value?: string) {
@@ -60,7 +84,10 @@ const Layout: FunctionComponent = () => {
                 openShellAdb();
                 break;
             case 'reverseConnectionAdb':
-                reverseConnectionAdb();
+                reverseConnectionAdb(props.portServiceReverse, props.portDeviceReverse);
+                break;
+            case 'removeTheApp':
+                setShowDialogAlertRemove(true);
                 break;
         }
     }
@@ -70,10 +97,28 @@ const Layout: FunctionComponent = () => {
             <Drawer devices={devices} packageName={packageActive} packageActive={packageActive ? true : false} action={action} />
             <main className='flex-auto bg-slate-100 dark:bg-gray-800 h-screen  app-main overflow-auto' >
                 <Outlet />
+                <DialogAlertRemove isOpen={showDialogAlertRemove} packageName={packageActive} onAccept={() => {
+                    removeTheApp(packageActive, () => { action('backToList'); });
+                    setShowDialogAlertRemove(false);
+                }} closeModal={() => { setShowDialogAlertRemove(false); }} />
+                <DialogLoading isOpen={isLoadingCommand} title={'Loading command'} description={'Loading command data. This process may take a few seconds...'} />
             </main>
         </div>
     )
 }
 
 
-export default Layout
+const mapStateToProps = (state: RootState) => {
+    const {
+        configuration
+    } = state
+    return {
+        locationPrintScreens: configuration.locationPrintScreens,
+        locationRecordScreen: configuration.locationRecordScreens,
+        portServiceReverse: configuration.portServiceReverse,
+        portDeviceReverse: configuration.portDeviceReverse,
+    }
+};
+
+
+export default connect(mapStateToProps)(Layout);

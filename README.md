@@ -67,9 +67,13 @@ or
 * [X] Open the application
 * [X] Close app Clear data
 * [X] Wipe data and reboot app
-* [ ] Configure adb location
+* [X] Uninstall selected packege
+* [X] Reverse ports options and action (React Native)
+* [ ] Open terminal Shell in the device
 * [ ] Menu to start emulator
 * [ ] Clear package selection
+* [ ] Capture Screen
+* [ ] Record Screen
 
 ## Requerimients
 
@@ -183,6 +187,11 @@ yarn tauri build
 * [X] Abrir la aplicación
 * [X] Cerrar aplicación Limpiar datos
 * [X] Limpiar datos y reiniciar de la aplicación
+* [X] Desinstalar la aplicacion activa
+* [X] Opciones y accion de reversa de puertos( Mas utilizado en React Native)
+* [ ] Abrir terminal Shell en el dispositivo
+* [ ] Capturar imagen de la pantalla
+* [ ] Grabar pantalla del dispositivo
 * [ ] Configurar la ubicación del ejecutable adb
 * [ ] Menú para iniciar emulador
 * [ ] Limpiar la selección de paquete
@@ -246,6 +255,9 @@ yarn tauri build
 ## Screenshots
 
  <p align="center">
-<img src="./resources/screenshots/android-taury-new-desing-default.png" width="800" alt="app_screenshot"  >
-<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="app_dark_screenshot"  >
+<img src="./resources/screenshots/android-taury-new-desing-default.png" width="800" alt="App screenshot"  >
+<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="App dark screenshot"  >
+
+<img src="./resources/screenshots/Details-ui-android-adb.jpg" width="800" alt="App details UI"  >
+
 </p>

@@ -56,9 +56,11 @@ export async function cleanCommand(packageActive: string, onData: (result: strin
 }
 
 export async function removeApp(deviceName: string, packageActive: string, onData: (result: string) => void, onError: (result: string) => void, onClose: (result: string) => void) {
-    sendCommand('remove_app', ["adb",
+    sendCommand('remove_app', [
         "-s",
         deviceName,
+        "shell",
+        "pm",
         "uninstall",
         packageActive,
     ], onData, onError, onClose);

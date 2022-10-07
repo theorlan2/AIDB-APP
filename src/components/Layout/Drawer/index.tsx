@@ -37,9 +37,9 @@ const Drawer: FunctionComponent<Props> = (props) => {
         },
         {
             name: 'Remove App',
-            disabled: true,
+            disabled: !props.packageActive,
             child: <TrashIcon className="h-5 w-10 " />,
-            action: () => { }
+            action: () => { props.action('removeTheApp') }
         },
         {
             name: 'Reverse to RN',
@@ -76,12 +76,12 @@ const Drawer: FunctionComponent<Props> = (props) => {
             <img src={logo} className="App-logo block dark:hidden m-auto w-24" alt="logo" />
             <img src={logoWhite} className="App-logo hidden dark:block m-auto  w-24" alt="logo" />
 
-            <div className='select-device flex justify-center' >
-                <button onClick={updateListDevices} className='mr-2 py-2 rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' >
+            <div className='select-device flex justify-between' >
+                <button onClick={updateListDevices} className='mr-4 py-2 rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' >
                     <ArrowPathIcon className={`h-5 w-10 ${isLoadingPhones ? 'animate-spin' : 'animate-none'}`} />
                 </button>
 
-                <div className="flex w-full ">
+                <div className="flex w-full">
                     <SelectDevice devices={props.devices} onChange={(value) => { setSelected(value); props.action('setDeviceActive', value.id); }} />
                 </div>
             </div >
@@ -95,13 +95,12 @@ const Drawer: FunctionComponent<Props> = (props) => {
                 )}
             </div>
 
-            {
-                props.packageActive && <div className="cont-package-name text-left mb-2 z-0">
-                    <h3 className='text-xs font-bold text-gray-500 dark:text-white' >Package:  </h3>
-                    <div className='flex items-center text-gray-500 dark:text-white opacity-80 uppercase z-0' >
-                        <CubeIcon className='h-5 w-5 mr-1' /><p className='package-name text-sm font-medium dark:text-white z-0' >{props.packageName}</p>
-                    </div>
+            {props.packageActive && <div className="cont-package-name text-left mb-3 z-0">
+                <h3 className='text-sm font-bold text-gray-500 dark:text-white' >Package active:  </h3>
+                <div className='flex items-center text-gray-500 dark:text-white opacity-80 uppercase z-0' >
+                    <CubeIcon className='h-5 w-5 mr-1' /><p className='package-name text-xs font-bold dark:text-white z-0' >{props.packageName}</p>
                 </div>
+            </div>
             }
             <div className="cont_buttons">
                 {!props.packageActive && selected && selected.id !== '0' && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' onClick={() => { props.action('listPackets') }}> GET PACKAGE LIST </button>}

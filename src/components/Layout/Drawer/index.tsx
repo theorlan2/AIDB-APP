@@ -31,7 +31,7 @@ const Drawer: FunctionComponent<Props> = (props) => {
         },
         {
             name: 'Commands Device',
-            disabled: false,
+            disabled: true,
             child: <CommandLineIcon className="h-5 w-10 " />,
             action: () => { props.action('openShellAdb') }
         },

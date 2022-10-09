@@ -125,6 +125,18 @@
                 "validator": "\\S+"
               }
             ]
+          },
+          {
+            "name": "open_shell_linux",
+            "cmd": "gnome-terminal",
+            "args": [
+              "--" ,
+              "bash",
+              "-ic",
+              {
+                "validator": "\\S+"
+              }
+            ]
           }
         ]
       }

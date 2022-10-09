@@ -5,7 +5,6 @@ import { cleanAndRestartCommand, cleanCommand, getListDevices, openShellOnDevice
 import { getTypeAndModelDevice } from '../utils/getListDevices';
 
 
-
 export const CommandsContext = createContext({
     commands: [] as CommandI[],
     devices: [] as any[],
@@ -14,6 +13,8 @@ export const CommandsContext = createContext({
     setIsLoadingCommand: (value: boolean) => { },
     setDeviceActive: (value: string) => { },
     packageActive: '',
+    packageMainActivity: 'MainActivity',
+    setPackageMainActivity: (value: string) => { },
     getTheListDevices: () => { },
     setPackageActive: (value: string) => { },
     removeTheApp: (packageActive: string, callBackSucces: () => void, callBackError?: () => void) => { },
@@ -29,15 +30,15 @@ export const CommandsContext = createContext({
 
 export const CommandsProvider = (props: any) => {
 
-
     const [isLoadingCommand, setIsLoadingCommand] = useState(false);
     const [devices, setDevices] = useState([] as { id: string, name: string }[]);
     const [commands, setCommands] = useState([] as CommandI[]);
     const [packageActive, setPackageActive] = useState('');
+    const [packageMainActivity, setPackageMainActivity] = useState('MainActivity');
     const [deviceActive, setDeviceActive] = useState('');
 
     function open() {
-        startAppCommand(packageActive, data => {
+        startAppCommand(packageActive, packageMainActivity, data => {
             setCommands((previewState: CommandI[]) => [...previewState, { str: 'Command Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]); setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
         },
             _error => {
@@ -147,7 +148,9 @@ export const CommandsProvider = (props: any) => {
         setDeviceActive: (data: string) => setDeviceActive(data),
         removeTheApp: (packageActive: string, callBackSucces: () => void, callBackError?: () => void) => removeTheApp(packageActive, callBackSucces, callBackError),
         packageActive,
+        packageMainActivity,
         setCommands: (data: CommandI[]) => setCommands(data),
+        setPackageMainActivity: (data: string) => setPackageMainActivity(data),
         setPackageActive: (data: string) => setPackageActive(data),
         reverseConnectionAdb: (portService: number, portDevice: number) => reverseConnectionAdb(portService, portDevice),
         openApp: () => open(),
@@ -157,6 +160,8 @@ export const CommandsProvider = (props: any) => {
         clearAndRestartApp: () => clearAndRestart(),
         getTheListDevices: () => getTheListDevices(),
     };
+
+
     return (
         <CommandsContext.Provider value={defaultValue} >
             {props.children}

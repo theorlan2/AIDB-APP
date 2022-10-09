@@ -5,10 +5,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useCommands } from '../../context/commandsContexts';
 import { RootState } from '../../store';
 import DialogAlertRemove from '../dialogs/DialogAlertRemove';
+import DialogEditActiviy from '../dialogs/DialogEditActiviy';
 import DialogLoading from '../dialogs/DialogLoading';
 import Drawer from './Drawer';
-
-
 
 
 interface StateProps {
@@ -26,10 +25,12 @@ interface OwnProps { };
 type Props = StateProps & DispatchProps & OwnProps;
 
 const Layout: FunctionComponent<Props> = (props) => {
-    const [showDialogAlertRemove, setShowDialogAlertRemove] = useState(true);
+    const [showDialogAlertRemove, setShowDialogAlertRemove] = useState(false);
+    const [showDialogEditActivty, setShowDialogChangeActivty] = useState(false);
     const navigate = useNavigate();
     const {
         packageActive,
+        packageMainActivity,
         devices,
         isLoadingCommand,
         openApp,
@@ -38,6 +39,7 @@ const Layout: FunctionComponent<Props> = (props) => {
         clearAndRestartApp,
         getTheListDevices,
         setPackageActive,
+        setPackageMainActivity,
         openShellAdb,
         setDeviceActive,
         reverseConnectionAdb,
@@ -89,6 +91,9 @@ const Layout: FunctionComponent<Props> = (props) => {
             case 'removeTheApp':
                 setShowDialogAlertRemove(true);
                 break;
+            case 'changeActivity':
+                setShowDialogChangeActivty(true);
+                break;
         }
     }
 
@@ -102,6 +107,7 @@ const Layout: FunctionComponent<Props> = (props) => {
                     setShowDialogAlertRemove(false);
                 }} closeModal={() => { setShowDialogAlertRemove(false); }} />
                 <DialogLoading isOpen={isLoadingCommand} title={'Loading command'} description={'Loading command data. This process may take a few seconds...'} />
+                <DialogEditActiviy isOpen={showDialogEditActivty} onAccept={(name) =>{ setPackageMainActivity(name); setShowDialogChangeActivty(false)} } packageName={packageActive} activityName={packageMainActivity} closeModal={() => setShowDialogChangeActivty(false)}  />
             </main>
         </div>
     )

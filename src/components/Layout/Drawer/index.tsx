@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLeftIcon, CubeIcon, ArrowLeftIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLeftIcon, CubeIcon, ArrowLeftIcon, ArrowPathIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 //
 import logo from '../../../assets/logo.png'
 import logoWhite from '../../../assets/logo_white.png'
@@ -104,9 +104,16 @@ const Drawer: FunctionComponent<Props> = (props) => {
             }
             <div className="cont_buttons">
                 {!props.packageActive && selected && selected.id !== '0' && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' onClick={() => { props.action('listPackets') }}> GET PACKAGE LIST </button>}
-                {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('backToList'); }}>
+                <div className="flex justify-between">
+
+                {props.packageActive && <button type="button" className='my-2 mr-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('backToList'); }}>
                     <ArrowLeftIcon className='h-4 w-4 mr-2' />
-                    BACK TO LIST</button>}
+                    BACK</button>}
+                {props.packageActive && <button type="button" className='my-2 ml-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('changeActivity'); }}>
+                    <ArrowLeftOnRectangleIcon className='h-4 w-4 mr-2' />
+                    ACTIVITY</button>}
+                </div>
+
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('startApp'); }}>START APPLICATION</button>}
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('stopApp'); }}>STOP APP</button>}
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('clean'); }}>CLEAN DATA</button>}

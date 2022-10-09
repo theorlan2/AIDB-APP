@@ -256,8 +256,17 @@ yarn tauri build
 
  <p align="center">
 <img src="./resources/screenshots/android-taury-new-desing-default.png" width="800" alt="App screenshot"  >
-<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="App dark screenshot"  >
-
-<img src="./resources/screenshots/Details-ui-android-adb.jpg" width="800" alt="App details UI"  >
-
 </p>
+ <p align="center">
+<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="App dark screenshot"  >
+</p>
+
+####  App details UI
+ 
+ <p align="center">
+<img src="./resources/screenshots/Details-ui-android-adb.jpg" width="800" alt="App details UI"  >
+</p>
+  <p align="center">
+<img src="./resources/screenshots/Details-ui-android-adb-2.jpg" width="800" alt="App details UI"  >
+</p>
+

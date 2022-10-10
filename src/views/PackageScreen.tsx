@@ -35,7 +35,7 @@ export default function PackageScreen() {
         let list = [] as string[];
         getListPackets(data => {
             setHaveError(false)
-            let str = data.replace("package:", "");
+            let str = data.replace("package:", "").trimEnd();
             list.push(str);
             setPackageList(list as any);
             setPackageListFilter(list as any);

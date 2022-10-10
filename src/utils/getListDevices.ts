@@ -6,7 +6,7 @@ export function getTypeAndModelDevice(str: string): { id: string, name: string }
     let lastPosition = str.indexOf('model');
     let positionFirstWhiteSpace = str.indexOf(' ');
 
-    if (!startPosition || str === 'List of devices attached') {
+    if (!startPosition || str.trimEnd() === 'List of devices attached') {
         return result;
     }
 

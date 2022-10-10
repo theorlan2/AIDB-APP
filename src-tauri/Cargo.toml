@@ -7,7 +7,7 @@ license = "MIT"
 repository = "https://github.com/theorlan2/Tauri-Android-ADB-GUI"
 homepage = "https://github.com/theorlan2/Tauri-Android-ADB-GUI"
 default-run = "app"
-edition = "2022"
+edition = "2021"
 rust-version = "1.57"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

@@ -72,7 +72,7 @@ export const CommandsProvider = (props: any) => {
     }
 
     function clearAndRestart() {
-        cleanAndRestartCommand(packageActive, data => {
+        cleanAndRestartCommand(packageActive, packageMainActivity, data => {
 
         },
             _error => {

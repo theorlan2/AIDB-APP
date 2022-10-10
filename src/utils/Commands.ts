@@ -174,13 +174,14 @@ export async function reverseConnection(
 
 export async function cleanAndRestartCommand(
   packageActive: string,
+  mainActivity: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
   await cleanCommand(packageActive, onData, onError, () => {
     stopAppCommand(packageActive, onData, onError, () => {
-      startAppCommand(packageActive, onData, onError, onClose);
+      startAppCommand(packageActive,mainActivity, onData, onError, onClose);
     });
   });
 }

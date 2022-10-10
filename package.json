@@ -1,7 +1,15 @@
 {
   "name": "android-adb-tauri",
+  "author": {
+    "name": "Dany Santos",
+    "url": "https://github.com/theorlan2"
+  },
+  "repository": {
+    "url": "https://github.com/theorlan2/Tauri-Android-ADB-GUI"
+  },
+  "license": "MIT",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

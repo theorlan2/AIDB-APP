@@ -1,7 +1,15 @@
 {
   "name": "android-adb-tauri",
+  "author": {
+    "name": "Dany Santos",
+    "url": "https://github.com/theorlan2"
+  },
+  "repository": {
+    "url": "https://github.com/theorlan2/Tauri-Android-ADB-GUI"
+  },
+  "license": "MIT",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.5",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -11,14 +19,21 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@heroicons/react": "^1.0.6",
+    "@headlessui/react": "^1.7.2",
+    "@heroicons/react": "^2.0.11",
+    "@popperjs/core": "^2.11.6",
+    "@reduxjs/toolkit": "^1.8.5",
     "@tauri-apps/api": "^1.0.0-rc.6",
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-popper": "^2.3.0",
+    "react-redux": "^8.0.4",
     "react-router-dom": "6",
-    "react-use": "^17.4.0"
+    "react-use": "^17.4.0",
+    "redux": "^4.2.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.13",

@@ -3,9 +3,10 @@
     windows_subsystem = "windows"
 )]
 
+
 /// Crate to fix the PATH environment variable on macOS and Linux when running a GUI app.
 fn check_patch_fix() {
-     fix_path_env::fix().unwrap();
+    fix_path_env::fix().unwrap();
 }
 
 fn main() {

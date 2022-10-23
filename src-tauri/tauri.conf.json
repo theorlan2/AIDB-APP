@@ -8,15 +8,57 @@
   },
   "package": {
     "productName": "android-adb-tauri",
-    "version": "0.1.0"
+    "version": "0.0.5"
   },
   "tauri": {
     "allowlist": {
       "all": false,
-      "shell": { 
+      "dialog": {
+        "open": true
+      },
+      "clipboard": {
+        "all": false,
+        "readText": false,
+        "writeText": true
+      },
+      "os": {
+        "all": true
+      },
+      "shell": {
         "execute": true,
+        "open": true,
         "sidecar": true,
         "scope": [
+          {
+            "name": "list_devices",
+            "cmd": "adb",
+            "args": [
+              "devices",
+              "-l"
+            ]
+          },
+          {
+            "name": "screen_cap",
+            "cmd": "adb",
+            "args": [
+              "shell",
+              "screencap",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "screen_record",
+            "cmd": "adb",
+            "args": [
+              "shell",
+              "screenrecord",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
           {
             "name": "list_packages",
             "cmd": "adb",
@@ -40,6 +82,11 @@
             ]
           },
           {
+            "name": "remove_app",
+            "cmd": "adb",
+            "args": true
+          },
+          {
             "name": "start_app",
             "cmd": "adb",
             "args": [
@@ -59,6 +106,21 @@
               "shell",
               "am",
               "force-stop",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "reverse_connection",
+            "cmd": "adb",
+            "args": true
+          },
+          {
+            "name": "open_shell_mac_os",
+            "cmd": "osascript",
+            "args": [
+              "-e",
               {
                 "validator": "\\S+"
               }

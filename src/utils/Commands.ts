@@ -1,6 +1,7 @@
 import { Command } from "@tauri-apps/api/shell";
 import { platform } from "@tauri-apps/api/os";
 
+
 export async function getListPackets(
   onData: (result: string) => void,
   onError: (result: string) => void,
@@ -21,6 +22,14 @@ export async function getListDevices(
   onClose: (result: string) => void
 ) {
   sendCommand("list_devices", ["devices", "-l"], onData, onError, onClose);
+}
+
+export async function getListDevicesIOS(
+  onData: (result: string) => void,
+  onError: (result: string) => void,
+  onClose: (result: string) => void
+) {
+  sendCommand("list_devices_ios", ["list-targets"], onData, onError, onClose);
 }
 
 export async function screenCap(

@@ -73,8 +73,8 @@ const Drawer: FunctionComponent<Props> = (props) => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg></button>
             </div>
-            <img src={logo} className="App-logo block dark:hidden m-auto w-24" alt="logo" />
-            <img src={logoWhite} className="App-logo hidden dark:block m-auto  w-24" alt="logo" />
+            <img src={logo} className="App-logo block dark:hidden m-auto w-48" alt="logo" />
+            <img src={logoWhite} className="App-logo hidden dark:block m-auto  w-48" alt="logo" />
 
             <div className='select-device flex justify-between' >
                 <button onClick={updateListDevices} className='mr-4 py-2 rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' >

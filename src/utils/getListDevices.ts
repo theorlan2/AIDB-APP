@@ -15,3 +15,16 @@ export function getTypeAndModelDevice(str: string): { id: string, name: string }
     return result;
 
 }
+
+export function getTypeAndModelDeviceIOS(str: string): { id: string, name: string } | null {
+    let modelPosition = 0;
+    let uuidPosition = 1;
+    let dividerChar = '|';
+    let dataAboutDevice = str.split(dividerChar);
+    if (!Array.isArray(dataAboutDevice)) {
+        return null;
+    }
+
+   return { id: dataAboutDevice[uuidPosition], name: dataAboutDevice[modelPosition] };
+
+}

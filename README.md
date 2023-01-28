@@ -10,7 +10,7 @@
  <p align="center">
 <img src="./resources/screenshots/adb-emulator.gif" width="800" alt="uad_screenshot"  >
 </p>
-adb commands GUI, to facilitate the development of android applications (React Native).
+AIDB commands GUI, to facilitate the development of android and IOS applications (React Native).
 
 ##### This software is still in an early stage of development. Check out the issues, and feel free to contribute!
 

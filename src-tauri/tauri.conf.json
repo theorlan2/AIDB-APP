@@ -38,6 +38,13 @@
             ]
           },
           {
+            "name": "list_devices_ios",
+            "cmd": "idb",
+            "args": [
+              "list-targets"
+            ]
+          },
+          {
             "name": "screen_cap",
             "cmd": "adb",
             "args": [
@@ -67,6 +74,17 @@
               "pm",
               "list",
               "packages"
+            ]
+          },
+          {
+            "name": "list_packages_ios",
+            "cmd": "idb",
+            "args": [
+              "list-apps",
+              "--udid",
+              {
+                "validator": "\\S+"
+              }
             ]
           },
           {
@@ -125,6 +143,15 @@
                 "validator": "\\S+"
               }
             ]
+          },
+          {
+            "name": "validate_installed_idb",
+            "cmd": "idb",
+            "args": [
+             {
+                "validator": "\\S+"
+              }
+            ]
           }
         ]
       }
@@ -173,7 +200,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": false,
-        "title": "Android ADB Commands",
+        "title": "Android-IOS AIDB Commands",
         "width": 800
       }
     ]

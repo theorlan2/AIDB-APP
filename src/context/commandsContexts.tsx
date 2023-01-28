@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { CommandStatus } from '../types/enums/commands';
 import { CommandI } from '../types/models/commands';
-import { cleanAndRestartCommand, cleanCommand, getListDevices, openShellOnDevice, removeApp, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
-import { getTypeAndModelDevice } from '../utils/getListDevices';
+import { cleanAndRestartCommand, cleanCommand, getListDevices, getListDevicesIOS as getListIOSDevices, openShellOnDevice, removeApp, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
+import { getTypeAndModelDevice, getTypeAndModelDeviceIOS } from '../utils/getListDevices';
 
 
 export const CommandsContext = createContext({
@@ -37,103 +37,117 @@ export const CommandsProvider = (props: any) => {
     const [packageMainActivity, setPackageMainActivity] = useState('MainActivity');
     const [deviceActive, setDeviceActive] = useState('');
 
+    function setCommandInfo(str: string) {
+        const dateNow = new Date().toDateString();
+        setCommands((previewState: CommandI[]) => [...previewState, { str, status: CommandStatus.INFO, date: dateNow }]);
+    }
+    function setCommandError(_error: string) {
+        const dateNow = new Date().toDateString();
+        setCommands((previewState: CommandI[]) => [...previewState, { str: `${_error}`, status: CommandStatus.ERROR, date: dateNow }])
+
+    }
+
     function open() {
         startAppCommand(packageActive, packageMainActivity, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: 'Command Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]); setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            setCommandInfo('Command Start App...');
+            setCommandInfo('Close Start App...');
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command start error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command start error: "${_error}"`),
+            () => setCommandInfo('Close Start App...'))
     }
 
 
     function close() {
         stopAppCommand(packageActive, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: 'Command Close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]); setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish Close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            setCommandInfo('Command Close App...');
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command close error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command close error: "${_error}"`),
+            () => setCommandInfo('Finish close App...'))
     }
 
     function clear() {
-        cleanCommand(packageActive, data => {
-
-        },
+        cleanCommand(packageActive, data => setCommandInfo('Clear data app...'),
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+                setCommandError(`Command clear error: "${_error}"`)
+            }, () => setCommandInfo('Finish clear App...')
+        )
     }
 
     function clearAndRestart() {
-        cleanAndRestartCommand(packageActive, packageMainActivity, data => {
-
-        },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear and restart error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear and restart App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+        cleanAndRestartCommand(packageActive, packageMainActivity, data => setCommandInfo('Start clear and restart App...'),
+            _error => setCommandError(`Command clear and restart error: "${_error}"`)
+            , () => setCommandInfo('Finish clear and restart App...'))
     }
 
     function getTheListDevices() {
+        // Get Android Devices
+        let androidDevices: { id: string; name: string; }[] = [];
         getListDevices(data => {
             let device = getTypeAndModelDevice(data);
             if (device) {
                 if (!devices.find(item => item.id === device?.id) && device.id != '')
-                    setDevices([...devices, device]);
+                    androidDevices.push(device);
             }
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command get list devices error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Get devices...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command get list devices error: "${_error}"`), () => {
+                setDevices((prev) => {
+                    let resultFilterDevices = androidDevices.filter(item => !prev.find(element => element.id == item.id))
+                    return [...prev, ...resultFilterDevices]
+                })
+                setCommandInfo('Get Android devices...')
+            });
+
+        // Get IOS Devices
+        let iosDevices: { id: string; name: string; }[] = [];
+        getListIOSDevices(data => {
+            let device = getTypeAndModelDeviceIOS(data);
+            if (device && device !== null) {
+                iosDevices.push(device);
+            }
+        },
+            _error => setCommandError(`Command get list devices error: "${_error}"`), () => {
+                setCommandInfo('Get IOS devices...')
+                setDevices((prev) => {
+                    let resultFilterIosDevices = iosDevices.filter(item => !prev.find(element => element.id == item.id))
+                    return [...prev, ...resultFilterIosDevices]
+                });
+            });
+
     }
 
     function openShellAdb() {
         openShellOnDevice(deviceActive, data => {
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command open shell error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Open Shell of device...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command open shell error: "${_error}"`), () => setCommandInfo('Open Shell of device...'))
     }
 
     function removeTheApp(packageActive: string, callBackSucces: () => void, callBackError?: () => void) {
         setIsLoadingCommand(true);
         removeApp(deviceActive, packageActive, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: `uninstall ${packageActive} on the device ${deviceActive}  ...`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            setCommandInfo(`Uninstall ${packageActive} on the device ${deviceActive}  ...`);
             if (callBackSucces) callBackSucces();
             setIsLoadingCommand(false);
         },
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command remove error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+                setCommandError(`Command remove error: "${_error}"`);
                 if (callBackError) callBackError();
             }, close => {
                 setIsLoadingCommand(false);
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Close command uninstall....`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommandInfo(`Close command uninstall....`)
             })
     }
 
     function reverseConnectionAdb(portService: number, portDevice: number) {
         setIsLoadingCommand(true);
         reverseConnection(deviceActive, portService, portDevice, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: `Complete reverse tcp:${[portService]} tcp:${portDevice}...`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+            setCommandInfo(`Complete reverse tcp:${[portService]} tcp:${portDevice}...`)
             setIsLoadingCommand(false);
         },
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command reverse error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+                setCommandError(`Command reverse error: "${_error}"`)
                 setIsLoadingCommand(false);
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Finish reverse tcp:${[portService]} tcp:${portDevice}....`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommandInfo(`Finish reverse tcp:${[portService]} tcp:${portDevice}....`);
                 setIsLoadingCommand(false);
             })
     }

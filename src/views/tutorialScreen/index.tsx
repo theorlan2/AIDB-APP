@@ -3,7 +3,7 @@ import { Disclosure } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { writeText } from '@tauri-apps/api/clipboard';
 //
-import CodeBlock from '../components/Tutorial/CodeBlock'
+import CodeBlock from './components/CodeBlock'
 
 type Props = {}
 
@@ -17,8 +17,8 @@ const TutorialScreen: FunctionComponent<Props> = () => {
           </div>
         </div>
         <div className='flex flex-col text-slate-600 dark:text-white ' >
-          <h4 className='font-medium' >AIDB GUI</h4>
-          <p className='text-sm ' >AIDB and IDB commands GUI, to facilitate the development of android and ios applications (React Native).</p>
+          <h4 className='font-medium' >AIDB</h4>
+          <p className='text-sm ' >Use AIDB commands GUI, to facilitate the development of android and ios applications (React Native).</p>
         </div>
       </div>
       <div className="">

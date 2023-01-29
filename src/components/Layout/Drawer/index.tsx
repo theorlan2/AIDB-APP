@@ -4,10 +4,11 @@ import { CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLef
 import logo from '../../../assets/logo.png'
 import logoWhite from '../../../assets/logo_white.png'
 import SelectDevice from './SelectDevice';
+import { Device } from '../../../models/device.model';
 
 
 type Props = {
-    devices: { id: string, name: string }[];
+    devices: Device[];
     packageActive: boolean;
     packageName: string;
     action: (name: string, value?: string) => void;

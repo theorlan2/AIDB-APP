@@ -1,4 +1,4 @@
-import { CommandStatus } from "../enums/commands";
+import { CommandStatus } from "./enums/commands.enum";
 
 export interface CommandI {
     str: string;

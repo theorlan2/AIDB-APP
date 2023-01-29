@@ -1,8 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckCircleIcon, ChevronUpDownIcon, DevicePhoneMobileIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
-
-type Device = { id: string, name: string };
+import { DeviceTypeEnum } from '../../../models/enums/device.enum';
+import { Device } from '../../../models/device.model';
 
 type Props = {
     devices: Device[];
@@ -10,7 +10,7 @@ type Props = {
 }
 
 const SelectDevice: FunctionComponent<Props> = (props) => {
-    const notDevice = { id: '0', name: 'Select device...', description: '', isDevice: false };
+    const notDevice = { id: '0', name: 'Select device...', type: DeviceTypeEnum.NONE };
     const [selected, setSelected] = useState(notDevice)
 
     useEffect(() => {

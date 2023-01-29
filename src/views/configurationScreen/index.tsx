@@ -3,12 +3,12 @@ import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Dispatch } from 'redux'
 //
-import InputLocation from '../components/Configuration/InputLocation'
-import Header from '../components/Layout/Header'
-import { useCommands } from '../context/commandsContexts'
-import { RootState } from '../store'
-import { setLocationPrintScreens, setLocationRecordScreens, setPortDeviceReverse, setPortServiceReverse } from '../store/feactures/configuration/configurationSlice'
-import { openDialogSelectDirectory } from '../utils/Dialogs'
+import InputLocation from './components/InputLocation'
+import Header from '../../components/Layout/Header'
+import { useCommands } from '../../context/commandsContexts'
+import { RootState } from '../../store'
+import { setLocationPrintScreens, setLocationRecordScreens, setPortDeviceReverse, setPortServiceReverse } from '../../store/feactures/configuration/configurationSlice'
+import { openDialogSelectDirectory } from '../../utils/Dialogs'
 
 
 interface StateProps {

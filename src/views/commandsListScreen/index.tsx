@@ -1,12 +1,12 @@
 import { FunctionComponent } from 'react'
 //
-import { CommandList } from '../components/CommandList'
-import Header from '../components/Layout/Header'
-import { useCommands } from '../context/commandsContexts'
+import { CommandList } from '../../components/commons/CommandList'
+import Header from '../../components/Layout/Header'
+import { useCommands } from '../../context/commandsContexts'
 
 type Props = {}
 
-const CommandsScreen: FunctionComponent<Props> = () => {
+const CommandsListScreen: FunctionComponent<Props> = () => {
 
     const { commands, setCommands } = useCommands()
   
@@ -24,4 +24,4 @@ const CommandsScreen: FunctionComponent<Props> = () => {
     )
 }
 
-export default CommandsScreen;
+export default CommandsListScreen;

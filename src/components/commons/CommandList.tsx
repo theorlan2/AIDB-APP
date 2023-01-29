@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
-import { CommandStatus } from '../types/enums/commands';
-import { CommandI } from '../types/models/commands';
+import { CommandStatus } from '../../models/enums/commands.enum';
+import { CommandI } from '../../models/commands.model';
 
 interface Props {
     items: CommandI[];

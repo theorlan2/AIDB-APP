@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { CommandStatus } from '../types/enums/commands';
-import { CommandI } from '../types/models/commands';
+import { CommandStatus } from '../models/enums/commands.enum';
+import { CommandI } from '../models/commands.model';
 import { cleanAndRestartCommand, cleanCommand, getListDevices, getListDevicesIOS as getListIOSDevices, openShellOnDevice, removeApp, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
 import { getTypeAndModelDevice, getTypeAndModelDeviceIOS } from '../utils/getListDevices';
 

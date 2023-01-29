@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 //
-import { useCommands } from '../context/commandsContexts';
-import { getListPackets } from '../utils/Commands';
-import { CommandStatus } from '../types/enums/commands';
-import { CommandI } from '../types/models/commands';
+import { useCommands } from '../../context/commandsContexts';
+import { getListPackets } from '../../utils/Commands';
+import { CommandStatus } from '../../models/enums/commands.enum';
+import { CommandI } from '../../models/commands.model';
 //
-import { ListPackages } from '../components/listpakages/ListPackages';
-import Header from '../components/Layout/Header';
+import { ListPackages } from './components/ListPackages';
+import Header from '../../components/Layout/Header';
 
 export default function PackageScreen() {
     const navigate = useNavigate();

@@ -11,7 +11,7 @@ import Header from '../../components/Layout/Header';
 
 export default function PackageScreen() {
     const navigate = useNavigate();
-    const { setPackageActive, setCommands } = useCommands();
+    const { setPackageActive, setCommands, deviceActive } = useCommands();
     const [packageList, setPackageList] = useState([] as string[]);
     const [isLoading, setIsLoading] = useState(false);
     const [haveError, setHaveError] = useState(false);
@@ -33,7 +33,9 @@ export default function PackageScreen() {
         setIsLoading(true);
         setCommands((previewState: CommandI[]) => [...previewState, { str: 'List Packages...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
         let list = [] as string[];
-        getListPackets(data => {
+        getListPackets(
+            deviceActive.type,
+            data => {
             setHaveError(false)
             let str = data.replace("package:", "").trimEnd();
             list.push(str);

@@ -18,13 +18,13 @@ const TutorialScreen: FunctionComponent<Props> = () => {
         </div>
         <div className='flex flex-col text-slate-600 dark:text-white ' >
           <h4 className='font-medium' >AIDB</h4>
-          <p className='text-sm ' >Use AIDB commands GUI, to facilitate the development of android and ios applications (React Native).</p>
+          <p className='text-sm ' >Use AIDB(Android-IOS Debug Bridge) commands GUI, to facilitate the development of android and ios applications (React Native).</p>
         </div>
       </div>
       <div className="">
         <h5 className='text-md font-medium text-slate-600 dark:text-white my-2' >Requirements</h5>
         <p className='text-sm text-slate-600 dark:text-white mt-2 mb-6 break-words' >
-          Need Android Debug Bridge (ADB) or Ios Debug Bridge(IDB) installed to get connection to android device.
+        Need Android Debug Bridge for android device (ADB) and XCode for IOS device, to get connection with emulator or physical device.
         </p>
         <p className='text-sm text-slate-600 dark:text-white my-2' >
           To Install ADB see the instructions:
@@ -108,38 +108,6 @@ const TutorialScreen: FunctionComponent<Props> = () => {
                     </li>
                     <li className='my-2' ><p className='mb-1 text-sm'>OpenSUSE Base:</p>
                       <CodeBlock content='sudo zypper install android-tools' showBtnClipboard copyToClipboard={async (value) => await writeText(value)} />
-                    </li>
-                  </ul>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        </div>
-        <p className='text-sm text-slate-600 dark:text-white my-2' >
-          To Install IDB (Only Mac OS) see the instructions:
-        </p>
-
-        <div className="flex flex-col">
-          <Disclosure as='div' className='my-2' >
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="flex w-full justify-between rounded  bg-white dark:bg-slate-100 px-4 py-2 text-left text-sm font-medium text-slate-900 hover:bg-slate-200 dark:hover:bg-white focus:outline-none focus-visible:ring focus-visible:ring-slate-500 focus-visible:ring-opacity-75">
-                  <span>MAC OS</span>
-                  <ChevronUpIcon
-                    className={`transition-transform duration-300 ${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-slate-500`}
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className=" px-4 pt-4 pb-2 text-sm text-slate-600 dark:text-white">
-                  <ul className='list-decimal' >
-                    <li className='my-2' ><p className=''>Install Homebrew</p></li>
-                    <li className='my-2'>
-                      <p className='mb-1' >First Add Facebook’s tap so that Homebrew can find IDB.</p>
-                      <CodeBlock content='brew tap facebook/fb' showBtnClipboard copyToClipboard={async (value) => await writeText(value)} />
-                    </li>
-                    <li className='my-2'>
-                      <p className='mb-1' >Install IDB platform tools</p>
-                      <CodeBlock content='brew install idb-companion' showBtnClipboard copyToClipboard={async (value) => await writeText(value)} />
                     </li>
                   </ul>
                 </Disclosure.Panel>

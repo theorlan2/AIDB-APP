@@ -1,19 +1,64 @@
 import { Command } from "@tauri-apps/api/shell";
 import { platform } from "@tauri-apps/api/os";
+import { TypeOfDeviceEnum } from "../models/enums/device.enum";
+import { Device } from "../models/device.model";
+
+let optionsToCommands = {
+  title: '',
+  commands: [] as string[]
+}
+
+function setDataToOptionsToCommands(deviceType: TypeOfDeviceEnum, title: { ios: string, android: string }, optionsAndroid: string[], optionsIos: string[]) {
+  switch (deviceType) {
+    case TypeOfDeviceEnum.IPHONE:
+      optionsToCommands = {
+        title: title.ios,
+        commands: ["simctl", ...optionsIos],
+      }
+      break;
+
+    default:
+      optionsToCommands = {
+        title: title.android,
+        commands: ["shell", ...optionsAndroid],
+      }
+      break;
+  }
+}
 
 
 export async function getListPackets(
+  deviceType: TypeOfDeviceEnum,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
-  sendCommand(
-    "list_packages",
-    ["shell", "pm", "list", "packages"],
-    onData,
-    onError,
-    onClose
-  );
+
+  setDataToOptionsToCommands(deviceType,
+    { ios: 'list_packages_ios', android: 'list_packages' },
+    ["pm", "list", "packages"],
+    ["listapps", "booted"]);
+  switch (deviceType) {
+    case TypeOfDeviceEnum.IPHONE:
+      sendCommand(
+        optionsToCommands.title,
+        optionsToCommands.commands,
+        (r) => r.indexOf(' =     {') > 1 && onData((r.replaceAll('=', '').replaceAll(':', '').replaceAll(';', '').replace(/(\r\n|\n|\r)/gm, '').replace(/[/\"/]/g, '').replace('{', '')).replace(/\s/g, '')),
+        onError,
+        onClose
+      );
+      break;
+    default:
+      sendCommand(
+        optionsToCommands.title,
+        optionsToCommands.commands,
+        onData,
+        onError,
+        onClose
+      );
+      break;
+
+  }
 }
 
 export async function getListDevices(
@@ -62,16 +107,23 @@ export async function recordScreen(
   );
 }
 
+
 export async function startAppCommand(
+  device: Device,
   packageActive: string,
   mainActivity: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
+
+  setDataToOptionsToCommands(device.type, { android: 'start_app', ios: 'start_app_ios' },
+    ["am", "start", "-n", `${packageActive}/.${mainActivity}`],
+    ["launch", device.id, packageActive]);
+
   sendCommand(
-    "start_app",
-    ["shell", "am", "start", "-n", `${packageActive}/.${mainActivity}`],
+    optionsToCommands.title,
+    optionsToCommands.commands,
     onData,
     onError,
     onClose
@@ -79,14 +131,20 @@ export async function startAppCommand(
 }
 
 export async function stopAppCommand(
+  device: Device,
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
+
+  setDataToOptionsToCommands(device.type, { android: 'stop_the_app', ios: 'stop_the_app_ios' },
+    ["am", "force-stop", `${packageActive}`],
+    ["terminate", device.id, packageActive])
+
   sendCommand(
-    "stop_the_app",
-    ["shell", "am", "force-stop", `${packageActive}`],
+    optionsToCommands.title,
+    optionsToCommands.commands,
     onData,
     onError,
     onClose
@@ -94,30 +152,59 @@ export async function stopAppCommand(
 }
 
 export async function cleanCommand(
+  device: Device,
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
-  sendCommand(
-    "clear_app",
-    ["shell", "pm", "clear", `${packageActive}`],
-    onData,
-    onError,
-    onClose
-  );
+
+  switch (device.type) {
+    case TypeOfDeviceEnum.IPHONE:
+      sendCommand(
+        "get_data_ios_app",
+        [
+          'simctl', 'get_app_container', device.id, packageActive, 'data'
+        ],
+        (r: string) => {
+          onData(r);
+          sendCommand(
+            "clear_ios_app",
+            ['-rf', r],
+            onData, onError, onClose)
+        },
+        onError,
+        onClose)
+
+      break;
+    default:
+      sendCommand(
+        "clear_app",
+        ["shell", "pm", "clear", `${packageActive}`],
+        onData,
+        onError,
+        onClose
+      );
+      break;
+  }
 }
 
 export async function removeApp(
-  deviceName: string,
+  device: Device,
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
-  sendCommand(
-    "remove_app",
-    ["-s", deviceName, "shell", "pm", "uninstall", packageActive],
+
+  setDataToOptionsToCommands(device.type, {
+    ios: 'remove_app_ios',
+    android: 'remove_app'
+  },
+    ["-s", device.name, "pm", "uninstall", packageActive],
+    ["uninstall", device.id, packageActive]
+  )
+  sendCommand(optionsToCommands.title, optionsToCommands.commands,
     onData,
     onError,
     onClose
@@ -182,15 +269,16 @@ export async function reverseConnection(
 }
 
 export async function cleanAndRestartCommand(
+  device: Device,
   packageActive: string,
   mainActivity: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void
 ) {
-  await cleanCommand(packageActive, onData, onError, () => {
-    stopAppCommand(packageActive, onData, onError, () => {
-      startAppCommand(packageActive,mainActivity, onData, onError, onClose);
+  await cleanCommand(device, packageActive, onData, onError, () => {
+    stopAppCommand(device, packageActive, onData, onError, () => {
+      startAppCommand(device, packageActive, mainActivity, onData, onError, onClose);
     });
   });
 }

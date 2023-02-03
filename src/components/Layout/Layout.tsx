@@ -80,7 +80,10 @@ const Layout: FunctionComponent<Props> = (props) => {
                 getTheListDevices();
                 break;
             case 'setDeviceActive':
-                setDeviceActive(value || '');
+                let device = devices.find(item => item.id === value);
+                if (device) {
+                    setDeviceActive(device);
+                }
                 break;
             case 'openShellAdb':
                 openShellAdb();
@@ -107,7 +110,7 @@ const Layout: FunctionComponent<Props> = (props) => {
                     setShowDialogAlertRemove(false);
                 }} closeModal={() => { setShowDialogAlertRemove(false); }} />
                 <DialogLoading isOpen={isLoadingCommand} title={'Loading command'} description={'Loading command data. This process may take a few seconds...'} />
-                <DialogEditActiviy isOpen={showDialogEditActivty} onAccept={(name) =>{ setPackageMainActivity(name); setShowDialogChangeActivty(false)} } packageName={packageActive} activityName={packageMainActivity} closeModal={() => setShowDialogChangeActivty(false)}  />
+                <DialogEditActiviy isOpen={showDialogEditActivty} onAccept={(name) => { setPackageMainActivity(name); setShowDialogChangeActivty(false) }} packageName={packageActive} activityName={packageMainActivity} closeModal={() => setShowDialogChangeActivty(false)} />
             </main>
         </div>
     )

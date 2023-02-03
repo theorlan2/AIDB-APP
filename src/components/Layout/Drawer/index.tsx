@@ -2,9 +2,12 @@ import React, { FunctionComponent, useEffect, useState } from 'react'
 import { CameraIcon, VideoCameraIcon, CommandLineIcon, TrashIcon, ArrowsRightLeftIcon, CubeIcon, ArrowLeftIcon, ArrowPathIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 //
 import logo from '../../../assets/logo.png'
+import logoWithOutIphone from '../../../assets/logo_android.png'
 import logoWhite from '../../../assets/logo_white.png'
+import logoWhiteWithOutIphone from '../../../assets/logo_android_white.png'
 import SelectDevice from './SelectDevice';
 import { Device } from '../../../models/device.model';
+import { Platform, platform } from '@tauri-apps/api/os';
 
 
 type Props = {
@@ -49,9 +52,19 @@ const Drawer: FunctionComponent<Props> = (props) => {
             action: () => { props.action('reverseConnectionAdb') }
         }
     ]
+    const [plataformName, setPlataformName] = useState<Platform>()
+
 
     useEffect(() => {
+        (async function getPlataform() {
+            const result = await platform();
+            setPlataformName(result);
+        })();
+
+    }, []);
+    useEffect(() => {
         updateListDevices();
+
     }, [])
 
     function updateListDevices() {
@@ -74,10 +87,16 @@ const Drawer: FunctionComponent<Props> = (props) => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                 </svg></button>
             </div>
-            <img src={logo} className="App-logo block dark:hidden m-auto w-48" alt="logo" />
-            <img src={logoWhite} className="App-logo hidden dark:block m-auto  w-48" alt="logo" />
-
-            <div className='select-device flex justify-between' >
+            {
+                plataformName == 'darwin' ?
+                    <img src={logo} className="App-logo block dark:hidden m-auto  w-40" alt="logo" />
+                    : <img src={logoWithOutIphone} className="App-logo block dark:hidden m-auto  w-40" alt="logo" />
+            }
+            {plataformName == 'darwin' ?
+                <img src={logoWhite} className="App-logo hidden dark:block m-auto  w-40" alt="logo" /> :
+                <img src={logoWhiteWithOutIphone} className="App-logo hidden dark:block m-auto  w-40" alt="logo" />
+            }
+            <div className='select-device flex justify-between mt-3' >
                 <button onClick={updateListDevices} className='mr-4 py-2 rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' >
                     <ArrowPathIcon className={`h-5 w-10 ${isLoadingPhones ? 'animate-spin' : 'animate-none'}`} />
                 </button>
@@ -99,7 +118,7 @@ const Drawer: FunctionComponent<Props> = (props) => {
             {props.packageActive && <div className="cont-package-name text-left mb-3 z-0">
                 <h3 className='text-sm font-bold text-gray-500 dark:text-white' >Package active:  </h3>
                 <div className='flex items-center text-gray-500 dark:text-white opacity-80 uppercase z-0' >
-                    <CubeIcon className='h-5 w-5 mr-1' /><p className='package-name text-xs font-bold dark:text-white z-0' >{props.packageName}</p>
+                    <CubeIcon className='h-5 w-5 mr-1' /><p className='package-name text-xs font-bold dark:text-white z-0  break-all  ' >{props.packageName}</p>
                 </div>
             </div>
             }
@@ -107,12 +126,12 @@ const Drawer: FunctionComponent<Props> = (props) => {
                 {!props.packageActive && selected && selected.id !== '0' && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900 ' onClick={() => { props.action('listPackets') }}> GET PACKAGE LIST </button>}
                 <div className="flex justify-between">
 
-                {props.packageActive && <button type="button" className='my-2 mr-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('backToList'); }}>
-                    <ArrowLeftIcon className='h-4 w-4 mr-2' />
-                    BACK</button>}
-                {props.packageActive && <button type="button" className='my-2 ml-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('changeActivity'); }}>
-                    <ArrowLeftOnRectangleIcon className='h-4 w-4 mr-2' />
-                    ACTIVITY</button>}
+                    {props.packageActive && <button type="button" className='my-2 mr-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('backToList'); }}>
+                        <ArrowLeftIcon className='h-4 w-4 mr-2' />
+                        BACK</button>}
+                    {props.packageActive && <button type="button" className='my-2 ml-1 d-block  h-10 px-6 font-semibold text-sm rounded flex justify-center items-center transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('changeActivity'); }}>
+                        <ArrowLeftOnRectangleIcon className='h-4 w-4 mr-2' />
+                        ACTIVITY</button>}
                 </div>
 
                 {props.packageActive && <button type="button" className='my-2 d-block w-full  h-10 px-6 font-semibold text-sm rounded transition hover:bg-slate-600 bg-slate-500 dark:bg-gray-800 text-white hover:dark:bg-slate-900' onClick={() => { props.action('startApp'); }}>START APPLICATION</button>}

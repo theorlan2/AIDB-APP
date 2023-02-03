@@ -7,8 +7,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "android-adb-tauri",
-    "version": "0.0.5"
+    "productName": "aidb-tauri",
+    "version": "0.0.7"
   },
   "tauri": {
     "allowlist": {
@@ -39,9 +39,11 @@
           },
           {
             "name": "list_devices_ios",
-            "cmd": "idb",
+            "cmd": "xcrun",
             "args": [
-              "list-targets"
+              "simctl",
+              "list",
+              "--json"
             ]
           },
           {
@@ -78,13 +80,11 @@
           },
           {
             "name": "list_packages_ios",
-            "cmd": "idb",
+            "cmd": "xcrun",
             "args": [
-              "list-apps",
-              "--udid",
-              {
-                "validator": "\\S+"
-              }
+              "simctl",
+              "listapps",
+              "booted"
             ]
           },
           {
@@ -100,9 +100,48 @@
             ]
           },
           {
+            "name": "get_data_ios_app",
+            "cmd": "xcrun",
+            "args": [
+              "simctl",
+              "get_app_container",
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              },
+              "data"
+            ]
+          },
+          {
+            "name": "clear_ios_app",
+            "cmd": "rm",
+            "args": [
+              "-rf",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
             "name": "remove_app",
             "cmd": "adb",
             "args": true
+          },
+          {
+            "name": "remove_app_ios",
+            "cmd": "xcrun",
+            "args": [
+              "simctl",
+              "uninstall",
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              }
+            ]
           },
           {
             "name": "start_app",
@@ -118,12 +157,40 @@
             ]
           },
           {
+            "name": "start_app_ios",
+            "cmd": "xcrun",
+            "args": [
+              "simctl",
+              "launch",
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
             "name": "stop_the_app",
             "cmd": "adb",
             "args": [
               "shell",
               "am",
               "force-stop",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "stop_the_app_ios",
+            "cmd": "xcrun",
+            "args": [
+              "simctl",
+              "terminate",
+              {
+                "validator": "\\S+"
+              },
               {
                 "validator": "\\S+"
               }
@@ -148,7 +215,7 @@
             "name": "validate_installed_idb",
             "cmd": "idb",
             "args": [
-             {
+              {
                 "validator": "\\S+"
               }
             ]
@@ -200,7 +267,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": false,
-        "title": "AIDB Commands",
+        "title": "AIDB (Android-IOS Debug Bridge)",
         "width": 800
       }
     ]

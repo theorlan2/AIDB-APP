@@ -8,7 +8,7 @@ let optionsToCommands = {
   commands: [] as string[]
 }
 
-function setDataToOptionsToCommands(deviceType: TypeOfDeviceEnum, title: { ios: string, android: string }, optionsAndroid: string[], optionsIos: string[]) {
+function setDataToOptionsToCommands(deviceType: TypeOfDeviceEnum, title: { ios: string, android: string, notIncludeDefault?:boolean }, optionsAndroid: string[], optionsIos: string[]) {
   switch (deviceType) {
     case TypeOfDeviceEnum.IPHONE:
       optionsToCommands = {
@@ -20,7 +20,7 @@ function setDataToOptionsToCommands(deviceType: TypeOfDeviceEnum, title: { ios: 
     default:
       optionsToCommands = {
         title: title.android,
-        commands: ["shell", ...optionsAndroid],
+        commands: title.notIncludeDefault ? [...optionsAndroid] : ["shell", ...optionsAndroid],
       }
       break;
   }
@@ -199,9 +199,10 @@ export async function removeApp(
 
   setDataToOptionsToCommands(device.type, {
     ios: 'remove_app_ios',
-    android: 'remove_app'
+    android: 'remove_app',
+    notIncludeDefault:true
   },
-    ["-s", device.name, "pm", "uninstall", packageActive],
+    ["-s", device.id , "shell", "pm", "uninstall", packageActive],   
     ["uninstall", device.id, packageActive]
   )
   sendCommand(optionsToCommands.title, optionsToCommands.commands,

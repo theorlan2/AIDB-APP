@@ -1,6 +1,8 @@
+import { Device, IosDeviceFromSimctlJson } from "../models/device.model";
+import { TypeOfDeviceEnum } from "../models/enums/device.enum";
 
 
-export function getTypeAndModelDevice(str: string): { id: string, name: string } | null {
+export function getTypeAndModelDevice(str: string): Device | null {
     let result = null;
     let startPosition = str.indexOf('product');
     let lastPosition = str.indexOf('model');
@@ -10,8 +12,12 @@ export function getTypeAndModelDevice(str: string): { id: string, name: string }
         return result;
     }
 
-    result = { id: str.substring(0, positionFirstWhiteSpace), name: str.substring(startPosition + ('product:'.length), lastPosition) };
+    result = { id: str.substring(0, positionFirstWhiteSpace), name: str.substring(startPosition + ('product:'.length), lastPosition), type: TypeOfDeviceEnum.ANDROID };
 
     return result;
 
+}
+
+export function getTypeAndModelDeviceIOS(data: IosDeviceFromSimctlJson): Device {
+    return { id: data.udid, name: data.name, type: TypeOfDeviceEnum.IPHONE, state: data.state };
 }

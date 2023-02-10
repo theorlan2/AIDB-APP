@@ -1,4 +1,4 @@
- Taury-Android-ADB-GUI
+AIDB (Android-IOS Debug Bridge)
 ----
 <p align="center">
 <img src="./resources/images/logo.png" width="100" alt="uad_screenshot"  >
@@ -8,14 +8,14 @@
 ### ENGLISH
 
  <p align="center">
-<img src="./resources/screenshots/adb-emulator.gif" width="800" alt="uad_screenshot"  >
+<img src="./resources/screenshots/aidb-emulator.gif" width="800" alt="uad_screenshot"  >
 </p>
-adb commands GUI, to facilitate the development of android applications (React Native).
+AIDB(Android-IOS Debug Bridge) commands GUI, to facilitate the development of android and IOS applications (React Native).
 
 ##### This software is still in an early stage of development. Check out the issues, and feel free to contribute!
 
 ## Summary
-Using android packages, we can get the package of our application and using the commands we can open, close, restart and delete application data.
+Using ios or android packages, we can get the package of our application and using the commands we can open, close, restart and delete application data.
 
 #### Start development
 Is necessary [install the prerequisites of **tauri**](https://tauri.app/v1/guides/getting-started/prerequisites) to prepare the  development environment. 
@@ -131,12 +131,12 @@ or
   </p>
 
 ### ESPAÑOL
-ADB comandos GUI, Para facilitar el desarrollo de aplicaciones android(React Native).
+AIDB(Android-IOS Debug Bridge) comandos GUI, Para facilitar el desarrollo de aplicaciones android e IOS (React Native).
 
 ##### El programa esta en desarrollo. Revisa o crea issues, y si puedes contribuye!
 
 ## Descripcion
-Usando la lista de paquetes de nuestro dispositivo android y seleccionando el paquete de nuestra aplicación, podremos abrir, cerrar, reiniciar y eliminar datos de la aplicación desde la interfaz. 
+Usando la lista de paquetes de nuestro dispositivo y seleccionando el paquete de nuestra aplicación, podremos abrir, cerrar, reiniciar y eliminar datos de la aplicación desde la interfaz. 
 
 
 #### Start development
@@ -189,7 +189,7 @@ yarn tauri build
 * [X] Limpiar datos y reiniciar de la aplicación
 * [X] Desinstalar la aplicacion activa
 * [X] Opciones y accion de reversa de puertos( Mas utilizado en React Native)
-* [ ] Abrir terminal Shell en el dispositivo
+* [-] Abrir terminal Shell en el dispositivo
 * [ ] Capturar imagen de la pantalla
 * [ ] Grabar pantalla del dispositivo
 * [ ] Configurar la ubicación del ejecutable adb
@@ -255,10 +255,10 @@ yarn tauri build
 ## Screenshots
 
  <p align="center">
-<img src="./resources/screenshots/android-taury-new-desing-default.png" width="800" alt="App screenshot"  >
+<img src="./resources/screenshots/aidb-new-desing-default.png" width="800" alt="App screenshot"  >
 </p>
  <p align="center">
-<img src="./resources/screenshots/android-taury-new-desing-dark.png" width="800" alt="App dark screenshot"  >
+<img src="./resources/screenshots/aidb-new-desing-dark.png" width="800" alt="App dark screenshot"  >
 </p>
 
 ####  App details UI

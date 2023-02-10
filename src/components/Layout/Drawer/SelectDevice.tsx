@@ -1,8 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckCircleIcon, ChevronUpDownIcon, DevicePhoneMobileIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, FunctionComponent, useEffect, useState } from 'react'
-
-type Device = { id: string, name: string };
+import { TypeOfDeviceEnum } from '../../../models/enums/device.enum';
+import { Device } from '../../../models/device.model';
 
 type Props = {
     devices: Device[];
@@ -10,7 +10,7 @@ type Props = {
 }
 
 const SelectDevice: FunctionComponent<Props> = (props) => {
-    const notDevice = { id: '0', name: 'Select device...', description: '', isDevice: false };
+    const notDevice = { id: '0', name: 'Select device...', type: TypeOfDeviceEnum.NONE };
     const [selected, setSelected] = useState(notDevice)
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const SelectDevice: FunctionComponent<Props> = (props) => {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <Listbox.Options className="absolute mt-1 max-h-screen w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
+                    <Listbox.Options className="absolute mt-1 max-h-[25em] w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
                         {props.devices.map((device, deviceIdx) => (
                             <Listbox.Option
                                 key={deviceIdx}

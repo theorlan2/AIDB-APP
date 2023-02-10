@@ -1,17 +1,19 @@
 import React, { createContext, useContext, useState } from 'react';
-import { CommandStatus } from '../types/enums/commands';
-import { CommandI } from '../types/models/commands';
-import { cleanAndRestartCommand, cleanCommand, getListDevices, openShellOnDevice, removeApp, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
-import { getTypeAndModelDevice } from '../utils/getListDevices';
+import { CommandStatus } from '../models/enums/commands.enum';
+import { CommandI } from '../models/commands.model';
+import { cleanAndRestartCommand, cleanCommand, getListDevices, getListDevicesIOS as getListIOSDevices, openShellOnDevice, removeApp, reverseConnection, startAppCommand, stopAppCommand } from '../utils/Commands';
+import { getTypeAndModelDevice, getTypeAndModelDeviceIOS } from '../utils/getListDevices';
+import { Device, IosDeviceFromSimctlJson } from '../models/device.model';
+import { platform } from '@tauri-apps/api/os';
 
 
 export const CommandsContext = createContext({
     commands: [] as CommandI[],
-    devices: [] as any[],
-    deviceActive: '',
+    devices: [] as Device[],
+    deviceActive: {} as Device,
     isLoadingCommand: false,
     setIsLoadingCommand: (value: boolean) => { },
-    setDeviceActive: (value: string) => { },
+    setDeviceActive: (value: Device) => { },
     packageActive: '',
     packageMainActivity: 'MainActivity',
     setPackageMainActivity: (value: string) => { },
@@ -31,109 +33,134 @@ export const CommandsContext = createContext({
 export const CommandsProvider = (props: any) => {
 
     const [isLoadingCommand, setIsLoadingCommand] = useState(false);
-    const [devices, setDevices] = useState([] as { id: string, name: string }[]);
+    const [devices, setDevices] = useState([] as Device[]);
     const [commands, setCommands] = useState([] as CommandI[]);
     const [packageActive, setPackageActive] = useState('');
     const [packageMainActivity, setPackageMainActivity] = useState('MainActivity');
-    const [deviceActive, setDeviceActive] = useState('');
+    const [deviceActive, setDeviceActive] = useState({} as Device);
+
+    function setCommandInfo(str: string) {
+        const dateNow = new Date().toDateString();
+        setCommands((previewState: CommandI[]) => [...previewState, { str, status: CommandStatus.INFO, date: dateNow }]);
+    }
+    function setCommandError(_error: string) {
+        const dateNow = new Date().toDateString();
+        setCommands((previewState: CommandI[]) => [...previewState, { str: `${_error}`, status: CommandStatus.ERROR, date: dateNow }])
+    }
 
     function open() {
-        startAppCommand(packageActive, packageMainActivity, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: 'Command Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]); setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+        startAppCommand(deviceActive, packageActive, packageMainActivity, data => {
+            setCommandInfo('Command Start App...');
+            setCommandInfo('Close Start App...');
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command start error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Close Start App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command start error: "${_error}"`),
+            () => setCommandInfo('Close Start App...'))
     }
 
 
     function close() {
-        stopAppCommand(packageActive, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: 'Command Close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]); setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish Close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
+        stopAppCommand(deviceActive, packageActive, data => {
+            setCommandInfo('Command Close App...');
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command close error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish close App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command close error: "${_error}"`),
+            () => setCommandInfo('Finish close App...'))
     }
 
     function clear() {
-        cleanCommand(packageActive, data => {
-
-        },
+        cleanCommand(deviceActive, packageActive, data => setCommandInfo('Clear data app...'),
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+                setCommandError(`Command clear error: "${_error}"`)
+            }, () => setCommandInfo('Finish clear App...')
+        )
     }
 
     function clearAndRestart() {
-        cleanAndRestartCommand(packageActive, packageMainActivity, data => {
-
-        },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command clear and restart error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Finish clear and restart App...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+        cleanAndRestartCommand(deviceActive, packageActive, packageMainActivity, data => setCommandInfo('Start clear and restart App...'),
+            _error => setCommandError(`Command clear and restart error: "${_error}"`)
+            , () => setCommandInfo('Finish clear and restart App...'))
     }
 
-    function getTheListDevices() {
+    async function getTheListDevices() {
+        const platformName = await platform();
+
+        // Get Android Devices
+        let androidDevices: Device[] = [];
         getListDevices(data => {
             let device = getTypeAndModelDevice(data);
             if (device) {
                 if (!devices.find(item => item.id === device?.id) && device.id != '')
-                    setDevices([...devices, device]);
+                    androidDevices.push(device);
             }
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command get list devices error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Get devices...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command get list devices error: "${_error}"`), () => {
+                setDevices((prev) => {
+                    let resultFilterDevices = androidDevices.filter(item => !prev.find(element => element.id == item.id))
+                    return [...prev, ...resultFilterDevices]
+                })
+                setCommandInfo('Get Android devices...')
+            });
+
+
+        // Get IOS Devices
+        let iosDevices: Device[] = [];
+        let jsonResult = '';
+        if (platformName == 'darwin') {
+            getListIOSDevices(data => {
+                jsonResult += data;
+            },
+                _error => setCommandError(`Command get list devices error: "${_error}"`),
+                () => {
+                    setCommandInfo('Get IOS devices...')
+                    for (const key in JSON.parse(jsonResult).devices) {
+                        if (Object.prototype.hasOwnProperty.call(JSON.parse(jsonResult).devices, key)) {
+                            const elements = JSON.parse(jsonResult).devices[key] as IosDeviceFromSimctlJson;
+                            if (Array.isArray(elements)) {
+                                iosDevices = elements.map(item => getTypeAndModelDeviceIOS(item))
+                            }
+                        }
+                    }
+                    setDevices((prev) => {
+                        let resultFilterIosDevices = iosDevices.filter(item => !prev.find(element => element.id == item.id))
+                        return [...prev, ...resultFilterIosDevices]
+                    });
+                });
+        }
+
     }
 
     function openShellAdb() {
-        openShellOnDevice(deviceActive, data => {
+        openShellOnDevice(deviceActive.id, data => {
         },
-            _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command open shell error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
-            }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: 'Open Shell of device...', status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            })
+            _error => setCommandError(`Command open shell error: "${_error}"`), () => setCommandInfo('Open Shell of device...'))
     }
 
     function removeTheApp(packageActive: string, callBackSucces: () => void, callBackError?: () => void) {
         setIsLoadingCommand(true);
         removeApp(deviceActive, packageActive, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: `uninstall ${packageActive} on the device ${deviceActive}  ...`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
-            if (callBackSucces) callBackSucces();
+            setCommandInfo(`Uninstall ${packageActive} on the device ${deviceActive.name}  ...`);
             setIsLoadingCommand(false);
         },
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command remove error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+                setCommandError(`Command remove error: "${_error}"`);
                 if (callBackError) callBackError();
             }, close => {
                 setIsLoadingCommand(false);
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Close command uninstall....`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                if (callBackSucces) callBackSucces();
+                setCommandInfo(`Close command uninstall....`)
             })
     }
 
     function reverseConnectionAdb(portService: number, portDevice: number) {
         setIsLoadingCommand(true);
-        reverseConnection(deviceActive, portService, portDevice, data => {
-            setCommands((previewState: CommandI[]) => [...previewState, { str: `Complete reverse tcp:${[portService]} tcp:${portDevice}...`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+        reverseConnection(deviceActive.id, portService, portDevice, data => {
+            setCommandInfo(`Complete reverse tcp:${[portService]} tcp:${portDevice}...`)
             setIsLoadingCommand(false);
         },
             _error => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Command reverse error: "${_error}"`, status: CommandStatus.ERROR, date: new Date().toDateString() }])
+                setCommandError(`Command reverse error: "${_error}"`)
                 setIsLoadingCommand(false);
             }, close => {
-                setCommands((previewState: CommandI[]) => [...previewState, { str: `Finish reverse tcp:${[portService]} tcp:${portDevice}....`, status: CommandStatus.INFO, date: new Date().toDateString() }]);
+                setCommandInfo(`Finish reverse tcp:${[portService]} tcp:${portDevice}....`);
                 setIsLoadingCommand(false);
             })
     }
@@ -145,7 +172,7 @@ export const CommandsProvider = (props: any) => {
         deviceActive,
         isLoadingCommand,
         setIsLoadingCommand: (value: boolean) => setIsLoadingCommand(value),
-        setDeviceActive: (data: string) => setDeviceActive(data),
+        setDeviceActive: (data: Device) => setDeviceActive(data),
         removeTheApp: (packageActive: string, callBackSucces: () => void, callBackError?: () => void) => removeTheApp(packageActive, callBackSucces, callBackError),
         packageActive,
         packageMainActivity,

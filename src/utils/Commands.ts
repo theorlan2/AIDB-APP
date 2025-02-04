@@ -1,5 +1,6 @@
 import { Command } from "@tauri-apps/api/shell";
 import { platform } from "@tauri-apps/api/os";
+import { copyFile, BaseDirectory } from "@tauri-apps/api/fs";
 //
 import { TypeOfDeviceEnum } from "@/types/device/device.enum";
 import { Device } from "@/types/device/device.model";
@@ -101,7 +102,9 @@ export async function screenCap(
   onError: (result: string) => void,
   onClose: (result: string) => void,
 ) {
-  const dirOnDevice = "/sdcard/screen.png";
+  const dateImage = new Date().valueOf();
+  const nameImage = `screen_${dateImage}.png`;
+  const dirOnDevice = `/sdcard/screen.png`;
 
   await sendCommand(
     "screen_cap",
@@ -114,15 +117,17 @@ export async function screenCap(
   setTimeout(() => {
     sendCommand(
       "pull_screen_capture",
-      ["pull", `${dirOnDevice}`, `${dirToCopy}`],
-      (data) => {
-        console.log("data pull", data);
-      },
+      ["pull", `${dirOnDevice}`, `/screen.png`],
+      onData,
       (er) => {
+        onError(er);
         console.log("error pull", er);
       },
       () => {
         console.log("close pull");
+        copyFile(`screen.png`, `${dirToCopy}/${nameImage}`, {}).then(() => {
+          onClose("Move the screen capture to your computer.");
+        });
       },
     );
   }, 1500);

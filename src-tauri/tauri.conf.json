@@ -13,6 +13,9 @@
   "tauri": {
     "allowlist": {
       "all": false,
+      "path": {
+        "all": true
+      },
       "dialog": {
         "open": true
       },
@@ -219,21 +222,28 @@
           {
             "name": "validate_installed_idb",
             "cmd": "idb",
-            "args": [
-              {
-                "validator": "\\S+"
-              }
-            ]
+            "args": true
+          },
+          {
+            "name": "move_file",
+            "cmd": "mv",
+            "args": true
           }
         ]
       },
       "fs": {
         "readFile": true,
         "writeFile": true,
-        "readDir": true,
-        "createDir": true,
+        "removeFile": true,
+        "copyFile": true,
         "exists": true,
-        "scope": ["*"]
+        "scope": ["$APP/**", "$RESOURCE/**"]
+      },
+      "protocol": {
+        "asset": true,
+        "assetScope": {
+          "allow": ["$APP/**", "$RESOURCE/**"]
+        }
       }
     },
     "bundle": {

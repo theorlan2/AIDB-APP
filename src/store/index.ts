@@ -1,22 +1,39 @@
-import { applyMiddleware, createStore } from '@reduxjs/toolkit'
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-//
-import rootReducer from './feactures';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-
-const persistConfig = {
-    key: 'AdbTauri',
-    storage,
+type State = {
+  locationPrintScreens: string;
+  locationRecordScreens: string;
+  portServiceReverse: number;
+  portDeviceReverse: number;
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+type Actions = {
+  setLocationPrintScreens: (locationScreens: string) => void;
+  setLocationRecordScreens: (locationRecordScreens: string) => void;
+  setPortServiceReverse: (portService: number) => void;
+  setPortDeviceReverse: (portDevice: number) => void;
+};
 
-export const store = createStore(persistedReducer);
-export const persistor = persistStore(store);
-
-
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export const useConfigurationStore = create<State & Actions>()(
+  persist(
+    (set, get) => ({
+      locationPrintScreens: "~",
+      locationRecordScreens: "~",
+      portServiceReverse: 8081,
+      portDeviceReverse: 8081,
+      setLocationPrintScreens: (locationScreens: string) =>
+        set((state) => ({ locationPrintScreens: locationScreens })),
+      setLocationRecordScreens: (locationRecordScreens: string) =>
+        set((state) => ({ ...state, locationRecordScreens })),
+      setPortServiceReverse: (portService: number) =>
+        set((state) => ({ ...state, portServiceReverse: portService })),
+      setPortDeviceReverse: (portDevice: number) =>
+        set((state) => ({ ...state, portDeviceReverse: portDevice })),
+    }),
+    {
+      name: "aidb-storage",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);

@@ -1,18 +1,18 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { Fragment, FunctionComponent, useState } from 'react'
+import { Fragment } from "react";
+//
+import { Dialog, Transition } from "@headlessui/react";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 type Props = {
   isOpen: boolean;
   title: string;
   description: string;
-}
+};
 
-const DialogLoading: FunctionComponent<Props> = (props) => {
-
+const DialogLoading = ({ isOpen, title, description }: Props) => {
   return (
-    <Transition appear show={props.isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => { }}>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -41,12 +41,10 @@ const DialogLoading: FunctionComponent<Props> = (props) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
-                  {props.title}
+                  {title}
                 </Dialog.Title>
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    {props.description}
-                  </p>
+                  <p className="text-sm text-gray-500">{description}</p>
                 </div>
                 <div className="mt-2 w-full flex justify-center ">
                   <ArrowPathIcon className={`h-5 w-10 animate-spin`} />
@@ -57,7 +55,7 @@ const DialogLoading: FunctionComponent<Props> = (props) => {
         </div>
       </Dialog>
     </Transition>
-  )
-}
+  );
+};
 
 export default DialogLoading;

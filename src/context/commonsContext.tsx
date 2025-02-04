@@ -1,29 +1,24 @@
-import React, { createContext, useContext } from 'react'; 
-import { useMedia } from 'react-use';
-
-
+import React, { createContext, useContext } from "react";
 
 export const CommonsContext = createContext({
-    title: '', 
-    setTitle: (value: string) => { },
+  title: "",
+  setTitle: (value: string) => {},
 });
 
-
 export const CommonsProvider = (props: any) => {
-    const [title, setTitle] = React.useState('');
+  const [title, setTitle] = React.useState("");
 
-    const defaultTheme = {
-        title, 
-        // Overrides the isDark value will cause re-render inside the context.  
-        setTitle: (scheme: string) => setTitle(scheme),
-    };
+  const defaultTheme = {
+    title,
+    // Overrides the isDark value will cause re-render inside the context.
+    setTitle: (scheme: string) => setTitle(scheme),
+  };
 
-    return (
-        <CommonsContext.Provider value={defaultTheme} >
-            { props.children}
-        </CommonsContext.Provider>
-    );
+  return (
+    <CommonsContext.Provider value={defaultTheme}>
+      {props.children}
+    </CommonsContext.Provider>
+  );
 };
 
- 
 export const useCommons = () => useContext(CommonsContext);

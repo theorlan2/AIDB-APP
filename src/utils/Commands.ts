@@ -1,51 +1,70 @@
 import { Command } from "@tauri-apps/api/shell";
 import { platform } from "@tauri-apps/api/os";
-import { TypeOfDeviceEnum } from "../models/enums/device.enum";
-import { Device } from "../models/device.model";
+//
+import { TypeOfDeviceEnum } from "@/types/device/device.enum";
+import { Device } from "@/types/device/device.model";
 
 let optionsToCommands = {
-  title: '',
-  commands: [] as string[]
-}
+  title: "",
+  commands: [] as string[],
+};
 
-function setDataToOptionsToCommands(deviceType: TypeOfDeviceEnum, title: { ios: string, android: string, notIncludeDefault?:boolean }, optionsAndroid: string[], optionsIos: string[]) {
+function setDataToOptionsToCommands(
+  deviceType: TypeOfDeviceEnum,
+  title: { ios: string; android: string; notIncludeDefault?: boolean },
+  optionsAndroid: string[],
+  optionsIos: string[],
+) {
   switch (deviceType) {
     case TypeOfDeviceEnum.IPHONE:
       optionsToCommands = {
         title: title.ios,
         commands: ["simctl", ...optionsIos],
-      }
+      };
       break;
 
     default:
       optionsToCommands = {
         title: title.android,
-        commands: title.notIncludeDefault ? [...optionsAndroid] : ["shell", ...optionsAndroid],
-      }
+        commands: title.notIncludeDefault
+          ? [...optionsAndroid]
+          : ["shell", ...optionsAndroid],
+      };
       break;
   }
 }
-
 
 export async function getListPackets(
   deviceType: TypeOfDeviceEnum,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-
-  setDataToOptionsToCommands(deviceType,
-    { ios: 'list_packages_ios', android: 'list_packages' },
+  setDataToOptionsToCommands(
+    deviceType,
+    { ios: "list_packages_ios", android: "list_packages" },
     ["pm", "list", "packages"],
-    ["listapps", "booted"]);
+    ["listapps", "booted"],
+  );
   switch (deviceType) {
     case TypeOfDeviceEnum.IPHONE:
       sendCommand(
         optionsToCommands.title,
         optionsToCommands.commands,
-        (r) => r.indexOf(' =     {') > 1 && onData((r.replaceAll('=', '').replaceAll(':', '').replaceAll(';', '').replace(/(\r\n|\n|\r)/gm, '').replace(/[/\"/]/g, '').replace('{', '')).replace(/\s/g, '')),
+        (r) =>
+          r.indexOf(" =     {") > 1 &&
+          onData(
+            r
+              .replaceAll("=", "")
+              .replaceAll(":", "")
+              .replaceAll(";", "")
+              .replace(/(\r\n|\n|\r)/gm, "")
+              .replace(/[/\"/]/g, "")
+              .replace("{", "")
+              .replace(/\s/g, ""),
+          ),
         onError,
-        onClose
+        onClose,
       );
       break;
     default:
@@ -54,17 +73,16 @@ export async function getListPackets(
         optionsToCommands.commands,
         onData,
         onError,
-        onClose
+        onClose,
       );
       break;
-
   }
 }
 
 export async function getListDevices(
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   sendCommand("list_devices", ["devices", "-l"], onData, onError, onClose);
 }
@@ -72,41 +90,58 @@ export async function getListDevices(
 export async function getListDevicesIOS(
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   sendCommand("list_devices_ios", ["list-targets"], onData, onError, onClose);
 }
 
 export async function screenCap(
-  dirOnDevice = "/sdcard/screen.png",
+  dirToCopy = "~",
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-  sendCommand(
+  const dirOnDevice = "/sdcard/screen.png";
+
+  await sendCommand(
     "screen_cap",
     ["shell", "screencap", dirOnDevice],
     onData,
     onError,
-    onClose
+    onClose,
   );
+
+  setTimeout(() => {
+    sendCommand(
+      "pull_screen_capture",
+      ["pull", `${dirOnDevice}`, `${dirToCopy}`],
+      (data) => {
+        console.log("data pull", data);
+      },
+      (er) => {
+        console.log("error pull", er);
+      },
+      () => {
+        console.log("close pull");
+      },
+    );
+  }, 1500);
 }
 
 export async function recordScreen(
   dirOnDevice = "/sdcard/demo.mp4",
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   sendCommand(
     "screen_record",
     ["shell", "screenrecord", dirOnDevice],
     onData,
     onError,
-    onClose
+    onClose,
   );
 }
-
 
 export async function startAppCommand(
   device: Device,
@@ -114,19 +149,21 @@ export async function startAppCommand(
   mainActivity: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-
-  setDataToOptionsToCommands(device.type, { android: 'start_app', ios: 'start_app_ios' },
+  setDataToOptionsToCommands(
+    device.type,
+    { android: "start_app", ios: "start_app_ios" },
     ["am", "start", "-n", `${packageActive}/.${mainActivity}`],
-    ["launch", device.id, packageActive]);
+    ["launch", device.id, packageActive],
+  );
 
   sendCommand(
     optionsToCommands.title,
     optionsToCommands.commands,
     onData,
     onError,
-    onClose
+    onClose,
   );
 }
 
@@ -135,19 +172,21 @@ export async function stopAppCommand(
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-
-  setDataToOptionsToCommands(device.type, { android: 'stop_the_app', ios: 'stop_the_app_ios' },
+  setDataToOptionsToCommands(
+    device.type,
+    { android: "stop_the_app", ios: "stop_the_app_ios" },
     ["am", "force-stop", `${packageActive}`],
-    ["terminate", device.id, packageActive])
+    ["terminate", device.id, packageActive],
+  );
 
   sendCommand(
     optionsToCommands.title,
     optionsToCommands.commands,
     onData,
     onError,
-    onClose
+    onClose,
   );
 }
 
@@ -156,25 +195,20 @@ export async function cleanCommand(
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-
   switch (device.type) {
     case TypeOfDeviceEnum.IPHONE:
       sendCommand(
         "get_data_ios_app",
-        [
-          'simctl', 'get_app_container', device.id, packageActive, 'data'
-        ],
+        ["simctl", "get_app_container", device.id, packageActive, "data"],
         (r: string) => {
           onData(r);
-          sendCommand(
-            "clear_ios_app",
-            ['-rf', r],
-            onData, onError, onClose)
+          sendCommand("clear_ios_app", ["-rf", r], onData, onError, onClose);
         },
         onError,
-        onClose)
+        onClose,
+      );
 
       break;
     default:
@@ -183,7 +217,7 @@ export async function cleanCommand(
         ["shell", "pm", "clear", `${packageActive}`],
         onData,
         onError,
-        onClose
+        onClose,
       );
       break;
   }
@@ -194,21 +228,24 @@ export async function removeApp(
   packageActive: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
-
-  setDataToOptionsToCommands(device.type, {
-    ios: 'remove_app_ios',
-    android: 'remove_app',
-    notIncludeDefault:true
-  },
-    ["-s", device.id , "shell", "pm", "uninstall", packageActive],   
-    ["uninstall", device.id, packageActive]
-  )
-  sendCommand(optionsToCommands.title, optionsToCommands.commands,
+  setDataToOptionsToCommands(
+    device.type,
+    {
+      ios: "remove_app_ios",
+      android: "remove_app",
+      notIncludeDefault: true,
+    },
+    ["-s", device.id, "shell", "pm", "uninstall", packageActive],
+    ["uninstall", device.id, packageActive],
+  );
+  sendCommand(
+    optionsToCommands.title,
+    optionsToCommands.commands,
     onData,
     onError,
-    onClose
+    onClose,
   );
 }
 
@@ -216,7 +253,7 @@ export async function openShellOnDevice(
   nameDevice: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   const platformName = await platform();
 
@@ -227,7 +264,7 @@ export async function openShellOnDevice(
         ["-e", `tell app "Terminal" to do script "adb -s ${nameDevice} shell"`],
         onData,
         onError,
-        onClose
+        onClose,
       );
       break;
     case "linux":
@@ -236,7 +273,7 @@ export async function openShellOnDevice(
         ["--", "bash", "-ic", `"adb -s ${nameDevice} shell; exec bash;"`],
         onData,
         onError,
-        onClose
+        onClose,
       );
       break;
     case "win32":
@@ -245,7 +282,7 @@ export async function openShellOnDevice(
         ["-e", `tell app "Terminal" to do script "adb -s ${nameDevice} shell"`],
         onData,
         onError,
-        onClose
+        onClose,
       );
     default:
       break;
@@ -258,14 +295,14 @@ export async function reverseConnection(
   portDevice: number,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   sendCommand(
     "reverse_connection",
     ["-s", nameDevice, "reverse", `tcp:${portService}`, `tcp:${portDevice}`],
     onData,
     onError,
-    onClose
+    onClose,
   );
 }
 
@@ -275,11 +312,18 @@ export async function cleanAndRestartCommand(
   mainActivity: string,
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   await cleanCommand(device, packageActive, onData, onError, () => {
     stopAppCommand(device, packageActive, onData, onError, () => {
-      startAppCommand(device, packageActive, mainActivity, onData, onError, onClose);
+      startAppCommand(
+        device,
+        packageActive,
+        mainActivity,
+        onData,
+        onError,
+        onClose,
+      );
     });
   });
 }
@@ -289,7 +333,7 @@ export async function sendCommand(
   params: string[],
   onData: (result: string) => void,
   onError: (result: string) => void,
-  onClose: (result: string) => void
+  onClose: (result: string) => void,
 ) {
   const command = new Command(commandName, params);
   command.on("close", onClose);

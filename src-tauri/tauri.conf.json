@@ -32,19 +32,12 @@
           {
             "name": "list_devices",
             "cmd": "adb",
-            "args": [
-              "devices",
-              "-l"
-            ]
+            "args": ["devices", "-l"]
           },
           {
             "name": "list_devices_ios",
             "cmd": "xcrun",
-            "args": [
-              "simctl",
-              "list",
-              "--json"
-            ]
+            "args": ["simctl", "list", "--json"]
           },
           {
             "name": "screen_cap",
@@ -52,6 +45,27 @@
             "args": [
               "shell",
               "screencap",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "pull_screen_capture",
+            "cmd": "adb",
+            "args": [
+              "pull",
+              {
+                "validator": "\\S+"
+              }
+            ]
+          },
+          {
+            "name": "rm_screen_capture",
+            "cmd": "adb",
+            "args": [
+              "shell",
+              "rm",
               {
                 "validator": "\\S+"
               }
@@ -71,21 +85,12 @@
           {
             "name": "list_packages",
             "cmd": "adb",
-            "args": [
-              "shell",
-              "pm",
-              "list",
-              "packages"
-            ]
+            "args": ["shell", "pm", "list", "packages"]
           },
           {
             "name": "list_packages_ios",
             "cmd": "xcrun",
-            "args": [
-              "simctl",
-              "listapps",
-              "booted"
-            ]
+            "args": ["simctl", "listapps", "booted"]
           },
           {
             "name": "clear_app",
@@ -221,6 +226,14 @@
             ]
           }
         ]
+      },
+      "fs": {
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "createDir": true,
+        "exists": true,
+        "scope": ["*"]
       }
     },
     "bundle": {

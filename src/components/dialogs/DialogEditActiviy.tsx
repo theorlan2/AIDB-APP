@@ -9,12 +9,18 @@ type Props = {
   onAccept: (activityName: string) => void;
 };
 
-const DialogEditActiviy: FunctionComponent<Props> = (props) => {
+const DialogEditActiviy = ({
+  isOpen,
+  packageName,
+  activityName,
+  closeModal,
+  onAccept,
+}: Props) => {
   const [name, setName] = useState("MainActivity");
 
   return (
-    <Transition appear show={props.isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={props.closeModal}>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -48,8 +54,8 @@ const DialogEditActiviy: FunctionComponent<Props> = (props) => {
                 <div className="mt-2">
                   <p className="text-sm text-gray-500 mb-2">
                     If have custom activity on the package "
-                    <span className="font-bold">{props.packageName}</span>".You
-                    cant edit for correty work of adb commands.
+                    <span className="font-bold">{packageName}</span>".You cant
+                    edit for correty work of adb commands.
                   </p>
                   <input
                     value={name}
@@ -63,14 +69,14 @@ const DialogEditActiviy: FunctionComponent<Props> = (props) => {
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent  px-4 py-2 text-sm font-medium text-slate-900 hover:bg-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 mr-3"
-                    onClick={props.closeModal}
+                    onClick={closeModal}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-                    onClick={() => props.onAccept(name)}
+                    onClick={() => onAccept(name)}
                   >
                     Save
                   </button>

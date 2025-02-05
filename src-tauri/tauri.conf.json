@@ -82,8 +82,19 @@
               "screenrecord",
               {
                 "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
               }
             ]
+          },
+          {
+            "name": "stop_screen_record",
+            "cmd": "adb",
+            "args": ["shell", "killall", "screenrecord"]
           },
           {
             "name": "list_packages",

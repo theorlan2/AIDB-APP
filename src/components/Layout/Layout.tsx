@@ -6,9 +6,9 @@ import { useConfigurationStore } from "@/store/index";
 //
 import DialogAlertRemove from "../dialogs/DialogAlertRemove";
 import DialogEditActiviy from "../dialogs/DialogEditActiviy";
+import DialogRecordScreen from "../dialogs/DialogRecordScreen";
 import DialogLoading from "../dialogs/DialogLoading";
 import Drawer from "./Drawer";
-import { screenCap } from "@/utils/Commands";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Layout = () => {
   const { portServiceReverse, portDeviceReverse } = useConfigurationStore();
   const [showDialogAlertRemove, setShowDialogAlertRemove] = useState(false);
   const [showDialogEditActivty, setShowDialogChangeActivty] = useState(false);
+  const [showDialogRecordScreen, setShowDialogRecordScreen] = useState(false);
   const {
     packageActive,
     packageMainActivity,
@@ -33,6 +34,8 @@ const Layout = () => {
     reverseConnectionAdb,
     removeTheApp,
     screenCapture,
+    startRecordScreen,
+    stopRecordScreen,
   } = useCommands();
 
   async function action(name: string, value?: string) {
@@ -86,6 +89,9 @@ const Layout = () => {
       case "changeActivity":
         setShowDialogChangeActivty(true);
         break;
+      case "screenRecord":
+        setShowDialogRecordScreen(true);
+        break;
       case "screenCapture":
         screenCapture(locationPrintScreens, () => {});
         break;
@@ -131,6 +137,10 @@ const Layout = () => {
           packageName={packageActive}
           activityName={packageMainActivity}
           closeModal={() => setShowDialogChangeActivty(false)}
+        />
+        <DialogRecordScreen
+          isOpen={showDialogRecordScreen}
+          closeModal={() => setShowDialogRecordScreen(false)}
         />
       </main>
     </div>

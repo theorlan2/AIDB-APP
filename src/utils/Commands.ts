@@ -134,14 +134,100 @@ export async function screenCap(
 }
 
 export async function recordScreen(
-  dirOnDevice = "/sdcard/demo.mp4",
+  dirToCopy = "/sdcard/demo.mp4",
+  options: { quality: number; timeLimit: number; dirOnDevice?: string } = {
+    quality: 4000000,
+    timeLimit: 30,
+    dirOnDevice: "/sdcard/demo.mp4",
+  },
+  onData: (result: string) => void,
+  onError: (result: string) => void,
+  onClose: (result: string) => void,
+) {
+  const dateVideo = new Date().valueOf();
+  const nameVideo = `record_screen_${dateVideo}.mp4`;
+  console.log("options", options);
+  let isCoping = false;
+  sendCommand(
+    "screen_record",
+    [
+      "shell",
+      "screenrecord",
+      `--bit-rate ${options.quality}`,
+      `--time-limit=${options.timeLimit}`,
+      options.dirOnDevice ? options.dirOnDevice : "/sdcard/demo.mp4",
+    ],
+    (r) => {
+      onData(r);
+      console.log("onData:screen_record", r);
+    },
+    (er) => {
+      onError(er);
+      if (er.trim().toLowerCase() == "terminated") isCoping = true;
+      setTimeout(() => {
+        sendCommand(
+          "pull_screen_capture",
+          [
+            "pull",
+            `${options.dirOnDevice ? options.dirOnDevice : "/sdcard/demo.mp4"}`,
+            `/demo.mp4`,
+          ],
+          (r) => {
+            onData(r);
+            console.log("onData:pull", r);
+          },
+          (er) => {
+            onError(er);
+            console.log("onError:pull", er);
+          },
+          () => {
+            copyFile(`demo.mp4`, `${dirToCopy}/${nameVideo}`, {}).then(() => {
+              onClose("Move the record screen to your computer.");
+            });
+            console.log("onClose:pull");
+          },
+        );
+      }, 1500);
+    },
+    () => {
+      console.log("onClose:screen_record");
+      onClose("Move the record screen capture to your computer.");
+      setTimeout(() => {
+        sendCommand(
+          "pull_screen_capture",
+          [
+            "pull",
+            `${options.dirOnDevice ? options.dirOnDevice : "/sdcard/demo.mp4"}`,
+            `/demo.mp4`,
+          ],
+          (r) => {
+            onData(r);
+            console.log("onData:pull", r);
+          },
+          (er) => {
+            onError(er);
+            console.log("onError:pull", er);
+          },
+          () => {
+            copyFile(`demo.mp4`, `${dirToCopy}/${nameVideo}`, {}).then(() => {
+              onClose("Move the record screen to your computer.");
+            });
+            console.log("onClose:pull");
+          },
+        );
+      }, 1500);
+    },
+  );
+}
+
+export function stopRecordScreen(
   onData: (result: string) => void,
   onError: (result: string) => void,
   onClose: (result: string) => void,
 ) {
   sendCommand(
-    "screen_record",
-    ["shell", "screenrecord", dirOnDevice],
+    "stop_screen_record",
+    ["shell", "killall", "screenrecord"],
     onData,
     onError,
     onClose,

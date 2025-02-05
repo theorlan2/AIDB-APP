@@ -42,9 +42,11 @@ const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
     },
     {
       name: "Screen Record",
-      disabled: true,
+      disabled: false,
       child: <VideoCameraIcon className="h-5 w-10 " />,
-      action: () => {},
+      action: () => {
+        action("screenRecord");
+      },
     },
     {
       name: "Commands Device",

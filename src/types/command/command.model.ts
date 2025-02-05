@@ -1,7 +1,7 @@
-import { CommandStatus } from "./enums/commands.enum";
+import { CommandStatus } from "./command.enum";
 
 export interface CommandI {
-    str: string;
-    status: CommandStatus;
-    date: string;
+  str: string;
+  status: CommandStatus;
+  date: string;
 }

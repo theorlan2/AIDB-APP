@@ -7,11 +7,13 @@ import {
   getListDevices,
   getListDevicesIOS as getListIOSDevices,
   openShellOnDevice,
+  recordScreen,
   removeApp,
   reverseConnection,
   screenCap,
   startAppCommand,
   stopAppCommand,
+  stopRecordScreen,
 } from "../utils/Commands";
 
 import {
@@ -45,6 +47,18 @@ export const CommandsContext = createContext({
     packageActive: string,
     callBackSucces: () => void,
     callBackError?: () => void,
+  ) => {},
+  startRecordScreen: (
+    dirOnDevice: string,
+    options: { quality: number; timeLimit: number; dirOnDevice?: string },
+    callBackSucces: () => void,
+    callBackError?: () => void,
+    callBackClose?: () => void,
+  ) => {},
+  stopRecordScreen: (
+    callBackSucces: () => void,
+    callBackError?: () => void,
+    callBackClose?: () => void,
   ) => {},
   openApp: () => {},
   setCommands: (t: any) => {},
@@ -235,6 +249,64 @@ export const CommandsProvider = (props: any) => {
       },
     );
   }
+
+  function screenRecord(
+    dirToCopy: string,
+    options: { quality: number; timeLimit: number; dirOnDevice?: string },
+    callBackSucces: () => void,
+    callBackError?: () => void,
+    callBackClose?: () => void,
+  ) {
+    recordScreen(
+      dirToCopy,
+      options,
+      (data) => {
+        console.log("onData:recordScreen");
+        setCommandInfo(
+          `Start record screen in the device ${deviceActive.name}  ...`,
+        );
+      },
+      (_error) => {
+        console.log("onError:recordScreen");
+        setCommandError(`Command  record screen error: "${_error}"`);
+        console.log("error:", _error);
+        if (callBackError) callBackError();
+      },
+      (close) => {
+        console.log("onClose:recordScreen");
+        if (callBackSucces) callBackSucces();
+        if (callBackClose) callBackClose();
+        setCommandInfo(`Close command record screen....`);
+      },
+    );
+  }
+  function stopRecordScreenL(
+    callBackSucces: () => void,
+    callBackError?: () => void,
+    callBackClose?: () => void,
+  ) {
+    setIsLoadingCommand(true);
+    stopRecordScreen(
+      (data) => {
+        setCommandInfo(
+          `Stop record screen in the device ${deviceActive.name}  ...`,
+        );
+        setIsLoadingCommand(false);
+      },
+      (_error) => {
+        setCommandError(`Command stop record screen error: "${_error}"`);
+        console.log("error:", _error);
+        if (callBackError) callBackError();
+      },
+      (close) => {
+        setIsLoadingCommand(false);
+        if (callBackSucces) callBackSucces();
+        if (callBackClose) callBackClose();
+        setCommandInfo(`Close command stop record screen....`);
+      },
+    );
+  }
+
   function removeTheApp(
     packageActive: string,
     callBackSucces: () => void,
@@ -299,6 +371,17 @@ export const CommandsProvider = (props: any) => {
       callBackSucces: () => void,
       callBackError?: () => void,
     ) => screenCapture(dirOnDevice, callBackSucces, callBackError),
+    startRecordScreen: (
+      dirToCopy: string,
+      options: { quality: number; timeLimit: number; dirOnDevice?: string },
+      callBackSucces: () => void,
+      callBackError?: () => void,
+    ) => screenRecord(dirToCopy, options, callBackSucces, callBackError),
+    stopRecordScreen: (
+      callBackSucces: () => void,
+      callBackError: () => void,
+      callBackClose: () => void,
+    ) => stopRecordScreen(callBackSucces, callBackError, callBackClose),
     removeTheApp: (
       packageActive: string,
       callBackSucces: () => void,

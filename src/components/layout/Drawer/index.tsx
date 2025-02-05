@@ -34,15 +34,15 @@ const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
   const listActions = [
     {
       name: "Print Screen",
-      disabled: false,
+      disabled: true,
       child: <CameraIcon className="h-5 w-10 " />,
       action: () => {
         action("screenCapture");
       },
     },
     {
-      name: "Screen Record",
-      disabled: false,
+      name: "Record Screen",
+      disabled: true,
       child: <VideoCameraIcon className="h-5 w-10 " />,
       action: () => {
         action("screenRecord");

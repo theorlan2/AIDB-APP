@@ -12,7 +12,7 @@ import {
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 //
-import SelectDevice from "./SelectDevice";
+import SelectDevice from "./components/SelectDevice";
 //
 import logo from "@/assets/logo.png";
 import logoWithOutIphone from "@/assets/logo_android.png";
@@ -34,7 +34,7 @@ const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
   const listActions = [
     {
       name: "Print Screen",
-      disabled: true,
+      disabled: false,
       child: <CameraIcon className="h-5 w-10 " />,
       action: () => {
         action("screenCapture");
@@ -42,7 +42,7 @@ const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
     },
     {
       name: "Record Screen",
-      disabled: true,
+      disabled: false,
       child: <VideoCameraIcon className="h-5 w-10 " />,
       action: () => {
         action("screenRecord");

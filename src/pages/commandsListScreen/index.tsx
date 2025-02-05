@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 //
 import { CommandList } from "../../components/commons/CommandList";
-import Header from "../../components/Layout/Header";
+import Header from "../../components/layout/Header";
 import { useCommands } from "../../context/commandsContexts";
 
 const CommandsListScreen = () => {

@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 //
 import InputLocation from "./components/InputLocation";
-import Header from "../../components/Layout/Header";
+import Header from "../../components/layout/Header";
 import { useCommands } from "../../context/commandsContexts";
 import { openDialogSelectDirectory } from "../../utils/Dialogs";
 import { useConfigurationStore } from "../../store";

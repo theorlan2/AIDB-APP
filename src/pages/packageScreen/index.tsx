@@ -5,7 +5,7 @@ import { useCommands } from "@/context/commandsContexts";
 import { getListPackets } from "@/utils/Commands";
 //
 import { ListPackages } from "./components/ListPackages";
-import Header from "@/components/Layout/Header";
+import Header from "@/components/layout/Header";
 //
 import { CommandStatus } from "@/types/command/command.enum";
 import { CommandI } from "@/types/command/command.model";

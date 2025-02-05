@@ -8,7 +8,7 @@ import DialogAlertRemove from "../dialogs/DialogAlertRemove";
 import DialogEditActiviy from "../dialogs/DialogEditActiviy";
 import DialogRecordScreen from "../dialogs/DialogRecordScreen";
 import DialogLoading from "../dialogs/DialogLoading";
-import Drawer from "./Drawer";
+import Drawer from "./Drawer/Drawer";
 
 const Layout = () => {
   const navigate = useNavigate();

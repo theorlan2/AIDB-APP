@@ -149,7 +149,7 @@ export const CommandsProvider = (props: any) => {
       (data) => {
         let device = getTypeAndModelDevice(data);
         if (device) {
-          if (!devices.find((item) => item.id === device?.id)) {
+          if (!devices.find((item) => item.id === device?.id) && device.name) {
             androidDevices.push(device);
           }
         }
@@ -157,7 +157,9 @@ export const CommandsProvider = (props: any) => {
       (_error) =>
         setCommandError(`Command get list devices error: "${_error}"`),
       () => {
-        setDevices((prev) => [...prev, ...androidDevices]);
+        if (androidDevices.length > 0) {
+          setDevices((prev) => [...prev, ...androidDevices]);
+        }
         setCommandInfo("Get Android devices...");
       },
     );
@@ -177,6 +179,16 @@ export const CommandsProvider = (props: any) => {
           const result = JSON.parse(jsonResult).devices;
           if (result && Array.isArray(result)) {
             iosDevices = result.map((item) => getTypeAndModelDeviceIOS(item));
+          } else if (result && typeof result === "object") {
+            let devices = [];
+            for (const key in result) {
+              const devicesResult = result[key].map(
+                (item: IosDeviceFromSimctlJson) =>
+                  getTypeAndModelDeviceIOS(item),
+              );
+              devices.push(devicesResult);
+            }
+            iosDevices = devices;
           }
           setDevices((prev) => [...prev, ...iosDevices]);
         },

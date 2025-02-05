@@ -93,7 +93,7 @@ const Layout = () => {
         setShowDialogRecordScreen(true);
         break;
       case "screenCapture":
-        screenCapture(locationPrintScreens, () => {});
+        screenCapture(locationPrintScreens);
         break;
     }
   }

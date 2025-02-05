@@ -37,12 +37,7 @@ export const CommandsContext = createContext({
   setPackageMainActivity: (value: string) => {},
   getTheListDevices: () => {},
   setPackageActive: (value: string) => {},
-  screenCapture: (
-    dirOnDevice: string,
-    callBackSucces: (result: string) => void,
-    callBackError?: (result: string) => void | undefined,
-    callBackClose?: (result: string) => void | undefined,
-  ) => {},
+  screenCapture: (dirOnDevice: string) => {},
   removeTheApp: (
     packageActive: string,
     callBackSucces: () => void,
@@ -115,7 +110,9 @@ export const CommandsProvider = (props: any) => {
         setCommandInfo("Command Close App...");
       },
       (_error) => setCommandError(`Command close error: "${_error}"`),
-      () => setCommandInfo("Finish close App..."),
+      () => {
+        setCommandInfo("Finish close App...");
+      },
     );
   }
 
@@ -152,22 +149,15 @@ export const CommandsProvider = (props: any) => {
       (data) => {
         let device = getTypeAndModelDevice(data);
         if (device) {
-          if (
-            !devices.find((item) => item.id === device?.id) &&
-            device.id != ""
-          )
+          if (!devices.find((item) => item.id === device?.id)) {
             androidDevices.push(device);
+          }
         }
       },
       (_error) =>
         setCommandError(`Command get list devices error: "${_error}"`),
       () => {
-        setDevices((prev) => {
-          let resultFilterDevices = androidDevices.filter(
-            (item) => !prev.find((element) => element.id == item.id),
-          );
-          return [...prev, ...resultFilterDevices];
-        });
+        setDevices((prev) => [...prev, ...androidDevices]);
         setCommandInfo("Get Android devices...");
       },
     );
@@ -184,29 +174,11 @@ export const CommandsProvider = (props: any) => {
           setCommandError(`Command get list devices error: "${_error}"`),
         () => {
           setCommandInfo("Get IOS devices...");
-          for (const key in JSON.parse(jsonResult).devices) {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                JSON.parse(jsonResult).devices,
-                key,
-              )
-            ) {
-              const elements = JSON.parse(jsonResult).devices[
-                key
-              ] as IosDeviceFromSimctlJson;
-              if (Array.isArray(elements)) {
-                iosDevices = elements.map((item) =>
-                  getTypeAndModelDeviceIOS(item),
-                );
-              }
-            }
+          const result = JSON.parse(jsonResult).devices;
+          if (result && Array.isArray(result)) {
+            iosDevices = result.map((item) => getTypeAndModelDeviceIOS(item));
           }
-          setDevices((prev) => {
-            let resultFilterIosDevices = iosDevices.filter(
-              (item) => !prev.find((element) => element.id == item.id),
-            );
-            return [...prev, ...resultFilterIosDevices];
-          });
+          setDevices((prev) => [...prev, ...iosDevices]);
         },
       );
     }
@@ -221,12 +193,7 @@ export const CommandsProvider = (props: any) => {
     );
   }
 
-  function screenCapture(
-    dirOnDevice: string,
-    callBackSucces: () => void,
-    callBackError?: () => void,
-    callBackClose?: () => void,
-  ) {
+  function screenCapture(dirOnDevice: string) {
     setIsLoadingCommand(true);
     screenCap(
       dirOnDevice,
@@ -239,24 +206,15 @@ export const CommandsProvider = (props: any) => {
       (_error) => {
         setCommandError(`Command screen capture error: "${_error}"`);
         console.log("error:", _error);
-        if (callBackError) callBackError();
       },
-      (close) => {
+      () => {
         setIsLoadingCommand(false);
-        if (callBackSucces) callBackSucces();
-        if (callBackClose) callBackClose();
         setCommandInfo(`Close command screen capture....`);
       },
     );
   }
 
-  function screenRecord(
-    dirToCopy: string,
-    options: { quality: number; timeLimit: number; dirOnDevice?: string },
-    callBackSucces: () => void,
-    callBackError?: () => void,
-    callBackClose?: () => void,
-  ) {
+  function startRecordScreen(dirToCopy: string, options: any) {
     recordScreen(
       dirToCopy,
       options,
@@ -270,24 +228,19 @@ export const CommandsProvider = (props: any) => {
         console.log("onError:recordScreen");
         setCommandError(`Command  record screen error: "${_error}"`);
         console.log("error:", _error);
-        if (callBackError) callBackError();
       },
       (close) => {
         console.log("onClose:recordScreen");
-        if (callBackSucces) callBackSucces();
-        if (callBackClose) callBackClose();
+        setIsLoadingCommand(false);
         setCommandInfo(`Close command record screen....`);
       },
     );
   }
-  function stopRecordScreenL(
-    callBackSucces: () => void,
-    callBackError?: () => void,
-    callBackClose?: () => void,
-  ) {
+
+  function stopToRecordScreen() {
     setIsLoadingCommand(true);
     stopRecordScreen(
-      (data) => {
+      () => {
         setCommandInfo(
           `Stop record screen in the device ${deviceActive.name}  ...`,
         );
@@ -296,22 +249,14 @@ export const CommandsProvider = (props: any) => {
       (_error) => {
         setCommandError(`Command stop record screen error: "${_error}"`);
         console.log("error:", _error);
-        if (callBackError) callBackError();
       },
-      (close) => {
+      () => {
         setIsLoadingCommand(false);
-        if (callBackSucces) callBackSucces();
-        if (callBackClose) callBackClose();
-        setCommandInfo(`Close command stop record screen....`);
       },
     );
   }
 
-  function removeTheApp(
-    packageActive: string,
-    callBackSucces: () => void,
-    callBackError?: () => void,
-  ) {
+  function removeTheApp(packageActive: string) {
     setIsLoadingCommand(true);
     removeApp(
       deviceActive,
@@ -324,12 +269,9 @@ export const CommandsProvider = (props: any) => {
       },
       (_error) => {
         setCommandError(`Command remove error: "${_error}"`);
-        if (callBackError) callBackError();
       },
-      (close) => {
+      () => {
         setIsLoadingCommand(false);
-        if (callBackSucces) callBackSucces();
-        setCommandInfo(`Close command uninstall....`);
       },
     );
   }
@@ -350,7 +292,7 @@ export const CommandsProvider = (props: any) => {
         setCommandError(`Command reverse error: "${_error}"`);
         setIsLoadingCommand(false);
       },
-      (close) => {
+      () => {
         setCommandInfo(
           `Finish reverse tcp:${[portService]} tcp:${portDevice}....`,
         );
@@ -366,27 +308,11 @@ export const CommandsProvider = (props: any) => {
     isLoadingCommand,
     setIsLoadingCommand: (value: boolean) => setIsLoadingCommand(value),
     setDeviceActive: (data: Device) => setDeviceActive(data),
-    screenCapture: (
-      dirOnDevice: string,
-      callBackSucces: () => void,
-      callBackError?: () => void,
-    ) => screenCapture(dirOnDevice, callBackSucces, callBackError),
-    startRecordScreen: (
-      dirToCopy: string,
-      options: { quality: number; timeLimit: number; dirOnDevice?: string },
-      callBackSucces: () => void,
-      callBackError?: () => void,
-    ) => screenRecord(dirToCopy, options, callBackSucces, callBackError),
-    stopRecordScreen: (
-      callBackSucces: () => void,
-      callBackError: () => void,
-      callBackClose: () => void,
-    ) => stopRecordScreen(callBackSucces, callBackError, callBackClose),
-    removeTheApp: (
-      packageActive: string,
-      callBackSucces: () => void,
-      callBackError?: () => void,
-    ) => removeTheApp(packageActive, callBackSucces, callBackError),
+    screenCapture: (dirOnDevice: string) => screenCapture(dirOnDevice),
+    startRecordScreen: (dirToCopy: string, options: any) =>
+      startRecordScreen(dirToCopy, options),
+    stopRecordScreen: stopToRecordScreen,
+    removeTheApp: (packageActive: string) => removeTheApp(packageActive),
     packageActive,
     packageMainActivity,
     setCommands: (data: CommandI[]) => setCommands(data),

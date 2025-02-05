@@ -28,5 +28,6 @@ export function getTypeAndModelDeviceIOS(
     name: data.name,
     type: TypeOfDeviceEnum.IPHONE,
     state: data.state,
+    os: data.os,
   };
 }

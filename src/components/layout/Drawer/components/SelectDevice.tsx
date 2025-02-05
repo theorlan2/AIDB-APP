@@ -76,6 +76,7 @@ const SelectDevice = ({ devices, onChange }: Props) => {
                         <div className="text-sm font-medium text-black">
                           {device.name}
                         </div>
+                        <p className="text-slate-500">{device.os}</p>
                         <p className="text-slate-500">{device.id}</p>
                       </div>
                     </div>

@@ -180,13 +180,26 @@ export const CommandsProvider = (props: any) => {
           if (result && Array.isArray(result)) {
             iosDevices = result.map((item) => getTypeAndModelDeviceIOS(item));
           } else if (result && typeof result === "object") {
-            let devices = [];
+            let devices = [] as Device[];
             for (const key in result) {
               const devicesResult = result[key].map(
-                (item: IosDeviceFromSimctlJson) =>
-                  getTypeAndModelDeviceIOS(item),
+                (item: IosDeviceFromSimctlJson) => {
+                  console.log("item device", item);
+                  const regex = /[iOS]+\-\d+\-\d+/; // This will match any version in the format X.Y (e.g., 16.2)
+                  let osVersion = key.match(regex);
+                  let osVersionStr;
+                  if (osVersion) {
+                    osVersionStr = osVersion[0]
+                      .replace("-", ": ")
+                      .replace("-", ".");
+                  }
+                  return getTypeAndModelDeviceIOS({
+                    ...item,
+                    os: osVersionStr,
+                  });
+                },
               );
-              devices.push(devicesResult);
+              devices = [...devices, ...devicesResult];
             }
             iosDevices = devices;
           }

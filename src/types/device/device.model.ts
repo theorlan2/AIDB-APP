@@ -5,6 +5,7 @@ export interface Device {
   name: string;
   type: TypeOfDeviceEnum;
   state?: string;
+  os?: string;
 }
 
 export type IosDeviceFromSimctlJson = {
@@ -16,6 +17,7 @@ export type IosDeviceFromSimctlJson = {
   name: string;
   state: string;
   udid: string;
+  os?: string;
 };
 
 export type IosAppsFromSimctlJson = {

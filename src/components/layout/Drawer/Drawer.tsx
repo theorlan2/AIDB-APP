@@ -9,7 +9,9 @@ import {
   CubeIcon,
   ArrowLeftIcon,
   ArrowPathIcon,
+  ListBulletIcon,
   ArrowLeftOnRectangleIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 //
 import SelectDevice from "./components/SelectDevice";
@@ -20,6 +22,7 @@ import logoWhite from "@/assets/logo_white.png";
 import logoWhiteWithOutIphone from "@/assets/logo_android_white.png";
 //
 import { Device } from "@/types/device/device.model";
+import { Link } from "react-router-dom";
 
 type Props = {
   devices: Device[];
@@ -31,6 +34,7 @@ type Props = {
 const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
   const [isLoadingPhones, setIsLoadingPhones] = useState(false);
   const [selected, setSelected] = useState({ id: "0" });
+
   const listActions = [
     {
       name: "Print Screen",
@@ -96,11 +100,18 @@ const Drawer = ({ devices, packageActive, packageName, action }: Props) => {
   return (
     <header className="w-72 relative float-left h-screen px-3 shadow-md bg-slate-200 dark:bg-gray-600 text-center box-border">
       <div className="text-right mt-2">
-        {/* <button className='rounded-full bg-slate-500 text-white dark:bg-gray-800 p-1 mx-2 ' onClick={() => setScheme(isDark ? 'light' : 'dark')}  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                </button> */}
+        <Link
+          to="/"
+          className="inline-flex rounded-full bg-slate-500 text-white dark:bg-gray-800 p-1 mx-2 "
+        >
+          <HomeIcon className=" w-6 h-6" />
+        </Link>
+        <Link
+          to="/commands"
+          className="inline-flex rounded-full bg-slate-500 text-white dark:bg-gray-800 p-1 mx-2 "
+        >
+          <ListBulletIcon className=" w-6 h-6" />
+        </Link>
         <button
           onClick={() => action("openConfiguration")}
           className="rounded-full bg-slate-500 text-white p-1 hover:bg-slate-600 dark:bg-gray-800 hover:dark:bg-slate-900 "

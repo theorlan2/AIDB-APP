@@ -60,6 +60,9 @@
               "pull",
               {
                 "validator": "\\S+"
+              },
+              {
+                "validator": "\\S+"
               }
             ]
           },

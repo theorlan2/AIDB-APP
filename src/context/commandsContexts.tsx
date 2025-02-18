@@ -223,6 +223,7 @@ export const CommandsProvider = (props: any) => {
     screenCap(
       dirOnDevice,
       (data) => {
+        setCommandInfo(data);
         setCommandInfo(
           `Screen capture in the device ${deviceActive.name}  ...`,
         );
@@ -232,7 +233,8 @@ export const CommandsProvider = (props: any) => {
         setCommandError(`Command screen capture error: "${_error}"`);
         console.log("error:", _error);
       },
-      () => {
+      (r) => {
+        setCommandInfo(`close ${r}`);
         setIsLoadingCommand(false);
         setCommandInfo(`Close command screen capture....`);
       },

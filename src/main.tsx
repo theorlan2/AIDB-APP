@@ -6,15 +6,12 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./app";
 import "./main.css";
 import { CommandsProvider } from "./context/commandsContexts";
-import { CommonsProvider } from "./context/commonsContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <CommandsProvider>
-        <CommonsProvider>
-          <App />
-        </CommonsProvider>
+        <App />
       </CommandsProvider>
     </BrowserRouter>
   </React.StrictMode>,

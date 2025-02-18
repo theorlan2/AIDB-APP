@@ -117,18 +117,15 @@ export async function screenCap(
   setTimeout(() => {
     sendCommand(
       "pull_screen_capture",
-      ["pull", `${dirOnDevice}`, `/screen.png`],
-      onData,
+      ["pull", `${dirOnDevice}`, `${dirToCopy}/${nameImage}`],
+      (r) => {
+        onData("copy print screen to PC");
+      },
       (er) => {
-        onError(er);
+        onError(`Error coping print screen to PC ${er}`);
         console.log("error pull", er);
       },
-      () => {
-        console.log("close pull");
-        copyFile(`screen.png`, `${dirToCopy}/${nameImage}`, {}).then(() => {
-          onClose("Move the screen capture to your computer.");
-        });
-      },
+      () => {},
     );
   }, 1500);
 }
@@ -170,7 +167,7 @@ export async function recordScreen(
           [
             "pull",
             `${options.dirOnDevice ? options.dirOnDevice : "/sdcard/demo.mp4"}`,
-            `/demo.mp4`,
+            `${dirToCopy}/${nameVideo}`,
           ],
           (r) => {
             onData(r);
@@ -181,10 +178,8 @@ export async function recordScreen(
             console.log("onError:pull", er);
           },
           () => {
-            copyFile(`demo.mp4`, `${dirToCopy}/${nameVideo}`, {}).then(() => {
-              onClose("Move the record screen to your computer.");
-            });
             console.log("onClose:pull");
+            onClose("Move the record screen to your computer.");
           },
         );
       }, 1500);
@@ -198,7 +193,7 @@ export async function recordScreen(
           [
             "pull",
             `${options.dirOnDevice ? options.dirOnDevice : "/sdcard/demo.mp4"}`,
-            `/demo.mp4`,
+            `${dirToCopy}/${nameVideo}`,
           ],
           (r) => {
             onData(r);
@@ -209,9 +204,7 @@ export async function recordScreen(
             console.log("onError:pull", er);
           },
           () => {
-            copyFile(`demo.mp4`, `${dirToCopy}/${nameVideo}`, {}).then(() => {
-              onClose("Move the record screen to your computer.");
-            });
+            onClose("Move the record screen to your computer.");
             console.log("onClose:pull");
           },
         );
